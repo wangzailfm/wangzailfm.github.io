@@ -1,0 +1,1307 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+  <meta name="google-site-verification" content="vjImUBDCK8Rg9G13vkIip_GUsZTtVV6s-XdSk81-jzA">
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="Android,Xposed,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="旺仔的个人博客" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.png?v=5.1.2">
+
+
+
+
+
+
+<meta name="description" content="前面有篇文章已经介绍了如何创建Xposed模块的文章了，这篇就让我们来实现一个简单的去除启动广告的功能吧。 起因为什么要是要去掉微博国际版的开屏广告呢，因为广告烦人啊，而且我打开微博的时间也是偶尔才会打开的，每次一打开就能看到广告，所以就想把这个开屏广告给删掉，奇怪的是，打开一次后，再关掉再打开是没有广告的，要隔一段时候才会出现广告，这个原因会在下面解释。">
+<meta name="keywords" content="Android,Xposed">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用Xposed去除微博国际版的启动广告">
+<meta property="og:url" content="https://www.jowanxu.top/2017/09/29/使用Xposed去除微博国际版的启动广告/index.html">
+<meta property="og:site_name" content="旺仔的个人博客">
+<meta property="og:description" content="前面有篇文章已经介绍了如何创建Xposed模块的文章了，这篇就让我们来实现一个简单的去除启动广告的功能吧。 起因为什么要是要去掉微博国际版的开屏广告呢，因为广告烦人啊，而且我打开微博的时间也是偶尔才会打开的，每次一打开就能看到广告，所以就想把这个开屏广告给删掉，奇怪的是，打开一次后，再关掉再打开是没有广告的，要隔一段时候才会出现广告，这个原因会在下面解释。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/37121193.jpg">
+<meta property="og:image" content="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/79999632.jpg">
+<meta property="og:image" content="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/69491043.jpg">
+<meta property="og:image" content="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/18323391.jpg">
+<meta property="og:image" content="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/27499876.jpg">
+<meta property="og:image" content="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/63256625.jpg">
+<meta property="og:image" content="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/72253303.jpg">
+<meta property="og:image" content="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/97538924.jpg">
+<meta property="og:image" content="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/47020374.jpg">
+<meta property="og:image" content="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/45001770.jpg">
+<meta property="og:image" content="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/10446189.jpg">
+<meta property="og:updated_time" content="2019-08-27T12:18:42.414Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="使用Xposed去除微博国际版的启动广告">
+<meta name="twitter:description" content="前面有篇文章已经介绍了如何创建Xposed模块的文章了，这篇就让我们来实现一个简单的去除启动广告的功能吧。 起因为什么要是要去掉微博国际版的开屏广告呢，因为广告烦人啊，而且我打开微博的时间也是偶尔才会打开的，每次一打开就能看到广告，所以就想把这个开屏广告给删掉，奇怪的是，打开一次后，再关掉再打开是没有广告的，要隔一段时候才会出现广告，这个原因会在下面解释。">
+<meta name="twitter:image" content="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/37121193.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://www.jowanxu.top/2017/09/29/使用Xposed去除微博国际版的启动广告/">
+
+
+
+
+
+  <title>使用Xposed去除微博国际版的启动广告 | 旺仔的个人博客</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">旺仔的个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">叫我旺仔<br>Android Developer</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br>
+            
+            公益
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://www.jowanxu.top/2017/09/29/使用Xposed去除微博国际版的启动广告/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Jowan">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="旺仔的个人博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">使用Xposed去除微博国际版的启动广告</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-29T08:14:17+08:00">
+                2017-09-29
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2019-08-27T20:18:42+08:00">
+                2019-08-27
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Xposed/" itemprop="url" rel="index">
+                    <span itemprop="name">Xposed</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <br>
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">文章字数</span>
+                
+                <span title="文章字数">
+                   字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长需</span>
+                
+                <span title="阅读时长需">
+                   分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>前面有篇文章已经介绍了如何创建<a href="https://www.jowanxu.top/2017/09/21/Xposed开发初体验/">Xposed模块的文章</a>了，这篇就让我们来实现一个简单的去除启动广告的功能吧。</p>
+<h2 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h2><p>为什么要是要去掉微博国际版的开屏广告呢，因为广告烦人啊，而且我打开微博的时间也是偶尔才会打开的，每次一打开就能看到广告，所以就想把这个开屏广告给删掉，奇怪的是，打开一次后，再关掉再打开是没有广告的，要隔一段时候才会出现广告，这个原因会在下面解释。</p>
+<a id="more"></a>
+<h2 id="实践"><a href="#实践" class="headerlink" title="实践"></a>实践</h2><h3 id="查找启动Activity"><a href="#查找启动Activity" class="headerlink" title="查找启动Activity"></a>查找启动Activity</h3><p>首先我们先拿到微博国际版的apk，apk的版本是2.5.7-5。</p>
+<p><img src="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/37121193.jpg" alt></p>
+<p>然后拉到Android Studio里面，然后点击AndroidManifest.xml文件，然后搜索<code>android.intent.category.LAUNCHER</code>，找到启动的Activity，在这里我们找到Activity是<code>com.weico.international.activity.LogoActivity</code></p>
+<p><img src="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/79999632.jpg" alt></p>
+<h3 id="反编译classes-dex"><a href="#反编译classes-dex" class="headerlink" title="反编译classes.dex"></a>反编译classes.dex</h3><p>在这里所用到的反编译工具都是可以在网上找到，工具为<code>dex2jar</code>和<code>jd-gui</code>，大家自行搜索下载。<br>找到了启动的Activity后呢，我们就要将apk给反编译，把里面的<code>classes.dex</code>文件提取出来，首先将微博国际版的apk后缀改为<code>.zip</code>，然后打开</p>
+<p><img src="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/69491043.jpg" alt></p>
+<p>然后将里面的两个dex文件，拷贝出来，放到dex2jar目录里面，然后拖两个文件到<code>dex2jar.bat</code>上面，让其转换成jar文件</p>
+<p><img src="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/18323391.jpg" alt></p>
+<p>转换过程</p>
+<p><img src="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/27499876.jpg" alt></p>
+<p>转换完成之后会出现<code>classes_dex2jar.jar</code>和<code>classes2_dex2jar.jar</code>两个文件</p>
+<p><img src="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/63256625.jpg" alt></p>
+<p>然后我们用<code>jd-gui</code>打开这两个jar文件，然后找到<code>LogoActivity</code></p>
+<p><img src="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/72253303.jpg" alt></p>
+<h3 id="查找广告"><a href="#查找广告" class="headerlink" title="查找广告"></a>查找广告</h3><p>使用<code>jd-gui</code>打开<code>LogoActivity</code>之后，我们就要在里面查找广告相关的内容了，我们搜索<code>ad</code>，最后找到<code>loginOrGlance</code>方法和<code>openGDTAD</code>方法。<br>通过下面代码可以看出，真正显示广告的是<code>openGDTAD</code>方法，而<code>loginOrGlance</code>方法则是判断当前启动是否需要显示广告，这下找到源头就好办了。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">loginOrGlance</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (!Setting.getInstance().loadBoolean(<span class="string">"first_open_guide"</span>))</span><br><span class="line">  &#123;</span><br><span class="line">    Setting.getInstance().saveBoolean(<span class="string">"first_open_guide"</span>, <span class="keyword">true</span>);</span><br><span class="line">    startActivityForResult(<span class="keyword">new</span> Intent(<span class="keyword">this</span>.me, GuideActivity.class), <span class="number">1025</span>);</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> (AccountsStore.getCurAccount() != <span class="keyword">null</span>)</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="keyword">if</span> (Setting.getInstance().loadInt(<span class="string">"display_ad"</span>) == <span class="number">1</span>)</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="keyword">if</span> (System.currentTimeMillis() - Setting.getInstance().loadLong(<span class="string">"ad_display_time"</span>) &gt; ProcessMonitor.repeatedTime)</span><br><span class="line">      &#123;</span><br><span class="line">        openGDTAD();</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">      &#125;</span><br><span class="line">      initMainTabActivity();</span><br><span class="line">      <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    initMainTabActivity();</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  initGuestActivity();</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 加载广告</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">openGDTAD</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  getWindow().getDecorView().postDelayed(<span class="keyword">new</span> Runnable()</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">      WIActions.startActivityWithAction(<span class="keyword">new</span> Intent(LogoActivity.<span class="keyword">this</span>.me, NewSplashActivity.class), Constant.Transaction.GROW_FADE);</span><br><span class="line">      LogoActivity.<span class="keyword">this</span>.finish();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  , <span class="number">600L</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="广告间隔出现原因"><a href="#广告间隔出现原因" class="headerlink" title="广告间隔出现原因"></a>广告间隔出现原因</h4><p>前面我们说过启动一次出现广告后，要隔一段时候才会重新出现广告，上面的代码<code>System.currentTimeMillis() - Setting.getInstance().loadLong(&quot;ad_display_time&quot;) &gt; ProcessMonitor.repeatedTime</code>，这里就是原因，当前时间跟上一次显示广告的时间相差超过<code>ProcessMonitor.repeatedTime</code>的值的时候，就会出现广告。<br>我们来看一下<code>repeatedTime</code>的值是多少，进到<code>ProcessMonitor</code>类里面，值为<code>1800000</code>毫秒，也就是30分钟才出现一次广告，比起那些每次打开都会出现广告的好多了，但是也阻挡不了我干掉广告。</p>
+<p><img src="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/97538924.jpg" alt></p>
+<h4 id="显示广告条件"><a href="#显示广告条件" class="headerlink" title="显示广告条件"></a>显示广告条件</h4><p>我们来看<code>loginOrGlance</code>方法里面的广告相关代码<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (Setting.getInstance().loadInt(<span class="string">"display_ad"</span>) == <span class="number">1</span>)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span> (System.currentTimeMillis() - Setting.getInstance().loadLong(<span class="string">"ad_display_time"</span>) &gt; ProcessMonitor.repeatedTime)</span><br><span class="line">    &#123;</span><br><span class="line">      openGDTAD();</span><br><span class="line">      <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  initMainTabActivity();</span><br><span class="line">  <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line">initMainTabActivity();</span><br><span class="line"><span class="keyword">return</span>;</span><br></pre></td></tr></table></figure></p>
+<p>可以看出，首先先判断<code>display_ad</code>的值是否为1，如果不为1，就直接调用启动主界面的<code>initMainTabActivity()</code>方法。<br>如果为1，在继续判断上一次显示广告的时间<code>ad_display_time</code>是否超过30分钟，如果超过就显示，没有超过就启动主界面。<br>所以，显示广告有两个条件</p>
+<ul>
+<li><code>display_ad</code>的值为1</li>
+<li>上一次显示广告的时间和现在的时间相差30分钟</li>
+</ul>
+<h3 id="Hook方法"><a href="#Hook方法" class="headerlink" title="Hook方法"></a>Hook方法</h3><p>这里我们来介绍一下Hook所用到的一下Xposed里面的方法<br><code>findAndHookMethod</code>方法，其参数对应为加载的类(<code>Class&lt;?&gt;</code>) + 方法名 + 参数类型(根据所Hook方法的参数的类型，即有多少个写多少个，加上<code>.class</code>) + <code>XC_MethodHook</code>回调接口。<br>XC_MethodHook中定义了回调方法：<br><code>beforeHookedMethod(MethodHookParam param)</code>：被hook方法调用前执行，调用<code>param.setResult</code>可以跳过被Hook的方法。<br><code>afterHookedMethod(MethodHookParam param)</code> ： 被Hook方法调用后执行，调用<code>param.setResult</code>更改被hook方法的执行结果。</p>
+<p><img src="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/47020374.jpg" alt></p>
+<p>通过上面分析，我们知道了所需要的Hook的两个方法，这两个值居然是存到本地<code>SharedPreferences</code>里面，那么我们修改就更容易了。</p>
+<ul>
+<li><p>一个是<code>Setting.getInstance().loadInt(&quot;display_ad&quot;)</code>，既是<code>Setting</code>类里面的<code>loadInt</code>方法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">loadInt</span><span class="params">(String paramString)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.mSharedPreferences.getInt(paramString, -<span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>一个是<code>Setting.getInstance().loadLong(&quot;ad_display_time&quot;)</code>，既是<code>Setting</code>类里面的<code>loadLong</code>方法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">long</span> <span class="title">loadLong</span><span class="params">(String paramString)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.mSharedPreferences.getLong(paramString, -<span class="number">1L</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="验证"><a href="#验证" class="headerlink" title="验证"></a>验证</h4><p>首先我们来验证一下我们上面的两个条件是否正确，打开我们的<code>Tutorial</code>类，在<code>handleLoadPackage</code>方法里面实现我们的Hook。<br>我们先验证30分钟出现的条件，既然是要超过30分钟，那么我们只需要将<code>loadLong(&quot;ad_display_time&quot;)</code>返回的值改为<code>-1L</code>，也就是<code>afterHookedMethod(MethodHookParam param)</code>方法里面修改，就可以实现每次启动都能出现广告界面了<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Tutorial</span> <span class="keyword">implements</span> <span class="title">IXposedHookLoadPackage</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">handleLoadPackage</span><span class="params">(<span class="keyword">final</span> XC_LoadPackage.LoadPackageParam lpparam)</span> <span class="keyword">throws</span> Throwable </span>&#123;</span><br><span class="line">        <span class="comment">// 只对微博国际版进行操作</span></span><br><span class="line">        <span class="keyword">if</span> (lpparam.packageName.equals(<span class="string">"com.weico.international"</span>)) &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="comment">// 获取Setting类</span></span><br><span class="line">                Class&lt;?&gt; aClass = XposedHelpers.findClassIfExists(<span class="string">"com.weico.international.activity.v4.Setting"</span>, lpparam.classLoader);</span><br><span class="line">                <span class="keyword">if</span> (aClass == <span class="keyword">null</span>) &#123;</span><br><span class="line">                    <span class="keyword">return</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="comment">// Hook方法</span></span><br><span class="line">                XposedHelpers.findAndHookMethod(aClass, <span class="string">"loadLong"</span>, String.class, <span class="keyword">new</span> XC_MethodHook() &#123;</span><br><span class="line"></span><br><span class="line">                    <span class="meta">@Override</span></span><br><span class="line">                    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">afterHookedMethod</span><span class="params">(MethodHookParam param)</span> <span class="keyword">throws</span> Throwable </span>&#123;</span><br><span class="line">                        String param1 = (String) param.args[<span class="number">0</span>];</span><br><span class="line">                        <span class="comment">// 如果参数为ad_display_time的时候将返回值改为-1L</span></span><br><span class="line">                        <span class="keyword">if</span> (!TextUtils.isEmpty(param1) &amp;&amp; param1.equals(<span class="string">"ad_display_time"</span>)) &#123;</span><br><span class="line">                            Log.e(<span class="string">"info"</span>, <span class="string">"com.weico.international---loadLong---ad_display_time"</span>);</span><br><span class="line">                            param.setResult(-<span class="number">1L</span>);</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;);</span><br><span class="line">            &#125; <span class="keyword">catch</span> (Throwable t) &#123;</span><br><span class="line">                XposedBridge.log(<span class="string">"Hook出错"</span> + t);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>接着运行重启手机，开机后，打开微博国际版。</p>
+<p><img src="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/45001770.jpg" alt></p>
+<p>可以看出，现在每次打开都会有广告，证明我们的猜测是正确的。</p>
+<h4 id="去除广告"><a href="#去除广告" class="headerlink" title="去除广告"></a>去除广告</h4><p>我们只需要将<code>Setting.getInstance().loadInt(&quot;display_ad&quot;)</code>的返回值改为-1就能实现去除广告的效果了，下面看代码<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Tutorial</span> <span class="keyword">implements</span> <span class="title">IXposedHookLoadPackage</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">handleLoadPackage</span><span class="params">(<span class="keyword">final</span> XC_LoadPackage.LoadPackageParam lpparam)</span> <span class="keyword">throws</span> Throwable </span>&#123;</span><br><span class="line">        <span class="comment">// 只对微博国际版进行操作</span></span><br><span class="line">        <span class="keyword">if</span> (lpparam.packageName.equals(<span class="string">"com.weico.international"</span>)) &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                Class&lt;?&gt; aClass = XposedHelpers.findClassIfExists(<span class="string">"com.weico.international.activity.v4.Setting"</span>, lpparam.classLoader);</span><br><span class="line">                <span class="keyword">if</span> (aClass == <span class="keyword">null</span>) &#123;</span><br><span class="line">                    <span class="keyword">return</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="comment">// Hook loadInt方法</span></span><br><span class="line">                XposedHelpers.findAndHookMethod(aClass, <span class="string">"loadInt"</span>, String.class, <span class="keyword">new</span> XC_MethodHook() &#123;</span><br><span class="line"></span><br><span class="line">                    <span class="meta">@Override</span></span><br><span class="line">                    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">afterHookedMethod</span><span class="params">(MethodHookParam param)</span> <span class="keyword">throws</span> Throwable </span>&#123;</span><br><span class="line">                        String param1 = (String) param.args[<span class="number">0</span>];</span><br><span class="line">                        <span class="comment">// 如果参数为display_ad的时候将返回值改为-1</span></span><br><span class="line">                        <span class="keyword">if</span> (!TextUtils.isEmpty(param1) &amp;&amp; param1.equals(<span class="string">"display_ad"</span>)) &#123;</span><br><span class="line">                            Log.e(<span class="string">"info"</span>, <span class="string">"com.weico.international---loadInt---display_ad"</span>);</span><br><span class="line">                            param.setResult(-<span class="number">1</span>);</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;);</span><br><span class="line">                <span class="comment">// Hook loadLong方法</span></span><br><span class="line">                XposedHelpers.findAndHookMethod(aClass, <span class="string">"loadLong"</span>, String.class, <span class="keyword">new</span> XC_MethodHook() &#123;</span><br><span class="line"></span><br><span class="line">                    <span class="meta">@Override</span></span><br><span class="line">                    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">afterHookedMethod</span><span class="params">(MethodHookParam param)</span> <span class="keyword">throws</span> Throwable </span>&#123;</span><br><span class="line">                        String param1 = (String) param.args[<span class="number">0</span>];</span><br><span class="line">                        <span class="comment">// 如果参数为ad_display_time的时候将返回值改为当前时间</span></span><br><span class="line">                        <span class="keyword">if</span> (!TextUtils.isEmpty(param1) &amp;&amp; param1.equals(<span class="string">"ad_display_time"</span>)) &#123;</span><br><span class="line">                            Log.e(<span class="string">"info"</span>, <span class="string">"com.weico.international---loadLong---ad_display_time"</span>);</span><br><span class="line">                            param.setResult(System.currentTimeMillis());</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;);</span><br><span class="line">            &#125; <span class="keyword">catch</span> (Throwable t) &#123;</span><br><span class="line">                XposedBridge.log(<span class="string">"Hook出错"</span> + t);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>接着运行重启手机，开机后，打开微博国际版。</p>
+<p><img src="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/10446189.jpg" alt></p>
+<p>可以看出，再也没有广告了。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>这次使用Xposed实践，来去除微博国际版的启动广告，可以说是收获挺大的，Hook到所调用的方法，然后里面进行我们自己的操作，关键就是在于<code>beforeHookedMethod</code>和<code>afterHookedMethod</code>这两个方法里面实现的操作。</p>
+<h2 id="Github"><a href="#Github" class="headerlink" title="Github"></a>Github</h2><p>Github地址在此奉上：<a href="https://github.com/wangzailfm/XposedRemoveAd" target="_blank" rel="noopener">XposedRemoveAd</a>，欢迎star</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    Jowan
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://www.jowanxu.top/2017/09/29/使用Xposed去除微博国际版的启动广告/" title="使用Xposed去除微博国际版的启动广告">https://www.jowanxu.top/2017/09/29/使用Xposed去除微博国际版的启动广告/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android/" rel="tag"><i class="fa fa-tag"></i> Android</a>
+          
+            <a href="/tags/Xposed/" rel="tag"><i class="fa fa-tag"></i> Xposed</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/09/28/探究Exported属性对startActivity的影响/" rel="next" title="探究Exported属性对startActivity的影响">
+                <i class="fa fa-chevron-left"></i> 探究Exported属性对startActivity的影响
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/10/12/使用Xposed实现QQ-TIM自动确认电脑扫一扫登录/" rel="prev" title="使用Xposed实现QQ/TIM自动确认电脑扫一扫登录">
+                使用Xposed实现QQ/TIM自动确认电脑扫一扫登录 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zMjA1My84NjE3"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="Jowan">
+          <p class="site-author-name" itemprop="name">Jowan</p>
+           
+              <p class="site-description motion-element" itemprop="description">叫我旺仔<br>Android Developer</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">49</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">70</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://plus.google.com/u/0/111824269044709365866" target="_blank" title="Google">
+                  
+                    <i class="fa fa-fw fa-google"></i>
+                  
+                    
+                      Google
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/wangzailfm" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/809077554" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                    
+                      Weibo
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="673173629@qq.com" target="_blank" title="E-Mail">
+                  
+                    <i class="fa fa-fw fa-envelope"></i>
+                  
+                    
+                      E-Mail
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/u011976726" target="_blank" title="CSDN">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      CSDN
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.jianshu.com/u/5509a21c1623" target="_blank" title="Jianshu">
+                  
+                    <i class="fa fa-fw fa-book"></i>
+                  
+                    
+                      Jianshu
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-block">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              Links
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://wanandroid.com/" title="玩Android" target="_blank">玩Android</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://blog.csdn.net/lmj623565791?viewmode=contents" title="HongYang" target="_blank">HongYang</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="https://lgzh1215.github.io/" title="萌雀" target="_blank">萌雀</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://ice1000.org/" title="冰封" target="_blank">冰封</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#起因"><span class="nav-number">1.</span> <span class="nav-text">起因</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实践"><span class="nav-number">2.</span> <span class="nav-text">实践</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#查找启动Activity"><span class="nav-number">2.1.</span> <span class="nav-text">查找启动Activity</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#反编译classes-dex"><span class="nav-number">2.2.</span> <span class="nav-text">反编译classes.dex</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查找广告"><span class="nav-number">2.3.</span> <span class="nav-text">查找广告</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#广告间隔出现原因"><span class="nav-number">2.3.1.</span> <span class="nav-text">广告间隔出现原因</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#显示广告条件"><span class="nav-number">2.3.2.</span> <span class="nav-text">显示广告条件</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Hook方法"><span class="nav-number">2.4.</span> <span class="nav-text">Hook方法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#验证"><span class="nav-number">2.4.1.</span> <span class="nav-text">验证</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#去除广告"><span class="nav-number">2.4.2.</span> <span class="nav-text">去除广告</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">3.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Github"><span class="nav-number">4.</span> <span class="nav-text">Github</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy;  2017 - 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jowan</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

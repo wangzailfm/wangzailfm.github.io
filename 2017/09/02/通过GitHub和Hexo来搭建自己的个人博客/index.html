@@ -1,0 +1,1373 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+  <meta name="google-site-verification" content="vjImUBDCK8Rg9G13vkIip_GUsZTtVV6s-XdSk81-jzA">
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="Hexo,GitHub,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="旺仔的个人博客" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.png?v=5.1.2">
+
+
+
+
+
+
+<meta name="description" content="搭建个人博客在我大学的时候建过一次，那时候是用新浪云和Wordpress搭建的，那时候新浪云服务是免费的，后来变收费，博客就没有了。之前便想着再弄个自己的博客出来，这几天就着手弄了起来。看到很多人的个人博客是用github来当服务器，然后通过Hexo来搭建博客框架，那么新建个人博客也用这两个来搭建吧。">
+<meta name="keywords" content="Hexo,GitHub">
+<meta property="og:type" content="article">
+<meta property="og:title" content="通过GitHub和Hexo来搭建自己的个人博客">
+<meta property="og:url" content="https://www.jowanxu.top/2017/09/02/通过GitHub和Hexo来搭建自己的个人博客/index.html">
+<meta property="og:site_name" content="旺仔的个人博客">
+<meta property="og:description" content="搭建个人博客在我大学的时候建过一次，那时候是用新浪云和Wordpress搭建的，那时候新浪云服务是免费的，后来变收费，博客就没有了。之前便想着再弄个自己的博客出来，这几天就着手弄了起来。看到很多人的个人博客是用github来当服务器，然后通过Hexo来搭建博客框架，那么新建个人博客也用这两个来搭建吧。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/80187345.jpg">
+<meta property="og:image" content="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/55346465.jpg">
+<meta property="og:image" content="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/833950.jpg">
+<meta property="og:image" content="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/60636278.jpg">
+<meta property="og:image" content="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/24635397.jpg">
+<meta property="og:image" content="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/3754760.jpg">
+<meta property="og:image" content="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/16695712.jpg">
+<meta property="og:image" content="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/58812063.jpg">
+<meta property="og:image" content="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/53971720.jpg">
+<meta property="og:image" content="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/86796511.jpg">
+<meta property="og:image" content="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/31953056.jpg">
+<meta property="og:image" content="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/93657540.jpg">
+<meta property="og:image" content="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/25737172.jpg">
+<meta property="og:image" content="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/47617076.jpg">
+<meta property="og:image" content="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/1698438.jpg">
+<meta property="og:image" content="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/33060748.jpg">
+<meta property="og:image" content="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/50347200.jpg">
+<meta property="og:image" content="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/55174042.jpg">
+<meta property="og:image" content="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/81124786.jpg">
+<meta property="og:image" content="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/78081248.jpg">
+<meta property="og:image" content="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/60843863.jpg">
+<meta property="og:image" content="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/16728395.jpg">
+<meta property="og:image" content="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/27060155.jpg">
+<meta property="og:image" content="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/80834716.jpg">
+<meta property="og:image" content="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/47359183.jpg">
+<meta property="og:image" content="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/9384221.jpg">
+<meta property="og:image" content="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/45416225.jpg">
+<meta property="og:image" content="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/39809222.jpg">
+<meta property="og:image" content="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/45361410.jpg">
+<meta property="og:image" content="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/51850127.jpg">
+<meta property="og:image" content="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/93292648.jpg">
+<meta property="og:image" content="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/65445711.jpg">
+<meta property="og:image" content="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/90978575.jpg">
+<meta property="og:image" content="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/99228220.jpg">
+<meta property="og:image" content="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/22050198.jpg">
+<meta property="og:image" content="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/79752783.jpg">
+<meta property="og:image" content="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/26971944.jpg">
+<meta property="og:image" content="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/27127728.jpg">
+<meta property="og:image" content="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/44537051.jpg">
+<meta property="og:image" content="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/55568569.jpg">
+<meta property="og:updated_time" content="2019-08-27T12:18:42.415Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="通过GitHub和Hexo来搭建自己的个人博客">
+<meta name="twitter:description" content="搭建个人博客在我大学的时候建过一次，那时候是用新浪云和Wordpress搭建的，那时候新浪云服务是免费的，后来变收费，博客就没有了。之前便想着再弄个自己的博客出来，这几天就着手弄了起来。看到很多人的个人博客是用github来当服务器，然后通过Hexo来搭建博客框架，那么新建个人博客也用这两个来搭建吧。">
+<meta name="twitter:image" content="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/80187345.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://www.jowanxu.top/2017/09/02/通过GitHub和Hexo来搭建自己的个人博客/">
+
+
+
+
+
+  <title>通过GitHub和Hexo来搭建自己的个人博客 | 旺仔的个人博客</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">旺仔的个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">叫我旺仔<br>Android Developer</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br>
+            
+            公益
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://www.jowanxu.top/2017/09/02/通过GitHub和Hexo来搭建自己的个人博客/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Jowan">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="旺仔的个人博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">通过GitHub和Hexo来搭建自己的个人博客</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-02T16:45:44+08:00">
+                2017-09-02
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2019-08-27T20:18:42+08:00">
+                2019-08-27
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Hexo/" itemprop="url" rel="index">
+                    <span itemprop="name">Hexo</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <br>
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">文章字数</span>
+                
+                <span title="文章字数">
+                   字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长需</span>
+                
+                <span title="阅读时长需">
+                   分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><img src="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/80187345.jpg" alt></p>
+<p>搭建个人博客在我大学的时候建过一次，那时候是用新浪云和Wordpress搭建的，那时候新浪云服务是免费的，后来变收费，博客就没有了。之前便想着再弄个自己的博客出来，这几天就着手弄了起来。<br>看到很多人的个人博客是用github来当服务器，然后通过<a href="https://hexo.io/zh-cn/docs/" target="_blank" rel="noopener">Hexo</a>来搭建博客框架，那么新建个人博客也用这两个来搭建吧。<br><a id="more"></a></p>
+<h2 id="GitHub主页"><a href="#GitHub主页" class="headerlink" title="GitHub主页"></a>GitHub主页</h2><h3 id="创建仓库"><a href="#创建仓库" class="headerlink" title="创建仓库"></a>创建仓库</h3><p>想必大家都有自己的Github账号吧，没有的可以到<a href="https://github.com/" target="_blank" rel="noopener">GitHub官网</a>注册账号，注册完后，我们来下一步，在我们的GitHub上面右上角的New repository来创建一个仓库。<br><img src="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/55346465.jpg" alt></p>
+<p>仓库名必须遵守相应格式：<code>your_username.github.io</code>，这样子在访问主页的时候直接用<code>your_username.github.io</code>就能访问。<br><img src="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/833950.jpg" alt></p>
+<p>我这里因为是已经创建了一个仓库了，所以会有提示，然后点Create repository确定创建仓库。</p>
+<h3 id="设置Pages"><a href="#设置Pages" class="headerlink" title="设置Pages"></a>设置Pages</h3><p>接下来我们来设置我们的GitHub Pages，打开我们刚刚创建的仓库，然后创建一个主页<code>index.html</code><br><img src="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/60636278.jpg" alt><br>然后在里面输入代码<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">h1</span>&gt;</span>Hello World<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>I'm hosted with GitHub Pages.<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p><img src="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/24635397.jpg" alt></p>
+<p>然后保存</p>
+<p><img src="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/3754760.jpg" alt></p>
+<p>接下来我们打开GitHub Pages的设置，点开<code>Settings</code></p>
+<p><img src="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/16695712.jpg" alt></p>
+<p>移到下面的<code>GitHub Pages</code></p>
+<p><img src="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/58812063.jpg" alt></p>
+<p>可以看出，我现在能用<code>https://jowanxu.github.io/</code>来访问我的github主页了，这里我是用我的一个新创建的号来演示的。<br><img src="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/53971720.jpg" alt></p>
+<p>通过上面的配置，我们能通过<code>your_username.github.io</code>来访问我们的博客主页了。</p>
+<h3 id="Clone仓库"><a href="#Clone仓库" class="headerlink" title="Clone仓库"></a>Clone仓库</h3><p>创建完仓库后（可直接安装Git,忽略Clone），我们需要将代码下载到本地，这里就需要用到Git了。</p>
+<h4 id="安装Git"><a href="#安装Git" class="headerlink" title="安装Git"></a>安装Git</h4><ul>
+<li>Windows：下载并安装 <a href="https://git-scm.com/download/win" target="_blank" rel="noopener">git</a>，<a href="https://git-for-windows.github.io/" target="_blank" rel="noopener">msysGit</a></li>
+<li>Mac：使用 <a href="http://mxcl.github.com/homebrew/" target="_blank" rel="noopener">Homebrew</a>, <a href="http://www.macports.org/" target="_blank" rel="noopener">MacPorts</a> ：<code>brew install git;</code>或下载 <a href="http://sourceforge.net/projects/git-osx-installer/" target="_blank" rel="noopener">安装程序</a> 安装。</li>
+<li>Linux (Ubuntu, Debian)：<code>sudo apt-get install git-core</code></li>
+<li>Linux (Fedora, Red Hat, CentOS)：<code>sudo yum install git-core</code></li>
+</ul>
+<p>安装完Git后，在命令行输入<code>git --version</code>，判断是否成功<br><img src="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/86796511.jpg" alt></p>
+<p>如果出现不存在命令，那么就添加Git目录下bin目录的环境变量，添加完后要重新打开命令行，然后在判断是否成功。<br><img src="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/31953056.jpg" alt></p>
+<p>这里我使用msysGit的Bash窗口来进行操作的。</p>
+<h4 id="配置Git参数"><a href="#配置Git参数" class="headerlink" title="配置Git参数"></a>配置Git参数</h4><p>安装完Git后，需要配置本地Git的参数，右键一个文件夹，然后选择<code>Git Bash</code>，打开Bash窗口，然后<br><img src="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/93657540.jpg" alt></p>
+<p>然后我们来设置Git的姓名和邮箱：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git config --global user.name &quot;Firstname Lastname&quot;</span><br><span class="line">git config --global user.email &quot;your_email@example.com&quot;</span><br></pre></td></tr></table></figure></p>
+<p>配置完成后，会在<code>~/.gitconfig</code>中生成相应的本地Git配置信息。</p>
+<h5 id="添加SSH-Key"><a href="#添加SSH-Key" class="headerlink" title="添加SSH Key"></a>添加SSH Key</h5><p>GitHub上连接已有仓库是验证是通过SSH的公开密钥进行认证的，在这里我们来生成我们自己的SSH Key，输入下面的命令，输入完后回车，会让你输入密钥的文件名和密码，系统会在<code>/Users/your_user_directory/.ssh/x</code>下生成私有密钥<code>id_rsa</code>和公开密钥<code>id_rsa.pub</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen -t rsa -C &quot;your_email@example.com&quot;</span><br></pre></td></tr></table></figure>
+<p>我们可以看到生成的文件<br><img src="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/25737172.jpg" alt></p>
+<p><code>id_rsa</code>文件内容是这样的，由<code>-----BEGIN RSA PRIVATE KEY-----</code>开始，和<code>-----END RSA PRIVATE KEY-----</code>结束<br><img src="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/47617076.jpg" alt></p>
+<p><code>id_rsa.pub</code>的内容是这样的，由<code>ssh-rsa</code>开头的<br><img src="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/1698438.jpg" alt></p>
+<p>然后我们在GitHub上面添加本地SSH密钥信息，在右上角选择<code>Settings</code>进入设置界面<br><img src="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/33060748.jpg" alt></p>
+<p>然后选中<code>SSH and GPG keys</code>，点击<code>New SSH key</code><br><img src="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/50347200.jpg" alt></p>
+<p>Title可以随便填，打开公开密钥<code>id_rsa.pub</code>，复制里面的内容到Key里面，填完密钥后，点<code>Add SSH key</code>就OK了。<br><img src="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/55174042.jpg" alt></p>
+<h5 id="ssh-agent"><a href="#ssh-agent" class="headerlink" title="ssh-agent"></a>ssh-agent</h5><p>我们要通过<code>ssh-agent</code>来添加刚刚创建的密钥，来登陆GitHub，<code>ssh-agent</code>是一种控制用来保存公钥身份验证所使用的私钥的程序，通过输入下面两条命令添加，第一条命令是反引号`，不是单引号’<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">eval `ssh-agent -s`</span><br><span class="line">ssh-add hexo_rsa（上面创建的密钥文件名）</span><br></pre></td></tr></table></figure></p>
+<p><img src="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/81124786.jpg" alt></p>
+<p>然后我们登陆一下GitHub，看是否登陆成功<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -T git@github.com</span><br></pre></td></tr></table></figure></p>
+<p>登陆成功~~~<br><img src="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/78081248.jpg" alt></p>
+<h3 id="Hexo框架"><a href="#Hexo框架" class="headerlink" title="Hexo框架"></a>Hexo框架</h3><p><a href="https://hexo.io/zh-cn/docs/" target="_blank" rel="noopener">Hexo</a> 是一个快速、简洁且高效的博客框架。<code>Hexo</code> 使用 <code>Markdown</code>（或其他渲染引擎）解析文章，在几秒内，即可利用靓丽的主题生成静态网页。<br>安装Hexo需要用到<code>npm</code>，而安装<code>npm</code>则需要安装<code>Node.js</code>，<code>Node.js</code>可以在官网<a href="https://nodejs.org/en/download/" target="_blank" rel="noopener">下载</a>，下载完成直接安装，然后通过命令行来判断是否安装完成</p>
+<p><img src="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/60843863.jpg" alt></p>
+<p><code>npm</code>设置<a href="https://npm.taobao.org/" target="_blank" rel="noopener">淘宝NPM镜像</a>，来提高下载速度<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -g cnpm --registry=https://registry.npm.taobao.org</span><br></pre></td></tr></table></figure></p>
+<p>设置完镜像后，就可以安装Hexo了<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -g hexo-cli</span><br></pre></td></tr></table></figure></p>
+<p>然后用命令行查看是否安装成功<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo -version</span><br></pre></td></tr></table></figure></p>
+<p><img src="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/16728395.jpg" alt></p>
+<p>接下来我们需要<strong>创建</strong>一个文件夹，文件名随意，也可以在已存在的文件夹里面，但是里面必须是什么文件都没有，然后进入到文件夹里面，来初始化Hexo<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo init</span><br></pre></td></tr></table></figure></p>
+<p>如果没有出现错误，那么我们的Hexo博客框架就安装完成了，生成的目录内容如下，其中<code>_config.yml</code>是网站的配置信息，我们大部分的参数都是在这个文件里面修改</p>
+<p><img src="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/27060155.jpg" alt></p>
+<p>接下来我们来启动Hexo服务<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo s</span><br></pre></td></tr></table></figure></p>
+<p>也可以开启debug模式，debug模式可以实时更新，方便查看修改后的结果。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo s --debug</span><br></pre></td></tr></table></figure></p>
+<p><img src="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/80834716.jpg" alt></p>
+<p>然后我们在浏览器上输入<code>localhost:4000</code>来打开Hexo</p>
+<p><img src="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/47359183.jpg" alt></p>
+<h4 id="Hexo常用命令"><a href="#Hexo常用命令" class="headerlink" title="Hexo常用命令"></a>Hexo常用命令</h4><h5 id="new"><a href="#new" class="headerlink" title="new"></a>new</h5><p>如果我们要创建一篇文章的话，我们可以通过<code>new</code>命令来创建，也可以直接在博客目录下面的<code>\source\_posts</code>里面创建<code>markdown</code>文件。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo new [layout] &lt;title&gt;</span><br></pre></td></tr></table></figure></p>
+<p>如果标题包含空格的话，请使用引号括起来。</p>
+<h5 id="generate"><a href="#generate" class="headerlink" title="generate"></a>generate</h5><p>generate命令是用来生成静态文件的，在我们发布到GitHub的仓库的时候，需要先生成，才能上传。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo generate</span><br></pre></td></tr></table></figure></p>
+<p>可以简写为<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo g</span><br></pre></td></tr></table></figure></p>
+<h5 id="server"><a href="#server" class="headerlink" title="server"></a>server</h5><p>开启服务器，网址为<code>http://localhost:4000</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo server</span><br></pre></td></tr></table></figure></p>
+<p>同样可以简写为<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo s</span><br></pre></td></tr></table></figure></p>
+<h5 id="deploy"><a href="#deploy" class="headerlink" title="deploy"></a>deploy</h5><p>部署网址，上传到我们的GitHub的仓库上面。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo deploy</span><br></pre></td></tr></table></figure></p>
+<p>同样可以简写为<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo d</span><br></pre></td></tr></table></figure></p>
+<h5 id="clean"><a href="#clean" class="headerlink" title="clean"></a>clean</h5><p>清除缓存文件 (<code>db.json</code>) 和已生成的静态文件 (<code>public</code>)。在某些情况（尤其是更换主题后），如果对站点的更改无论如何也不生效，运行该命令。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo clean</span><br></pre></td></tr></table></figure></p>
+<h4 id="Hexo配置Git"><a href="#Hexo配置Git" class="headerlink" title="Hexo配置Git"></a>Hexo配置Git</h4><p>我们要上传GitHub必须要先设置一些内容，打开博客目录下面的配置文件<code>_config.yml</code>，找到<code>deploy</code>，然后在<code>type</code>那里输入git，在<code>repo</code>那里输入我们的仓库地址，在<code>branch</code>那里输入<code>master</code>，<code>message</code>为上传日志，可不写<br><img src="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/9384221.jpg" alt></p>
+<p>一般我们上传到GitHub的时候我们用这条命令来执行，生成静态文件并且部署到服务器。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo g -d</span><br></pre></td></tr></table></figure></p>
+<p>上传完成之后，我们可以在博客文件夹里面的<code>.deploy_git</code>目录管理我们的仓库文件，那么我们上面就不需要Clone仓库下来了。<br><img src="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/45416225.jpg" alt></p>
+<p>下一步我们来通过域名解析GitHub主页地址来访问个人博客。</p>
+<h2 id="域名"><a href="#域名" class="headerlink" title="域名"></a>域名</h2><p>在本地搭建完个人博客后，我们就要将代码上传到我们的GitHub仓库上面去，然后我们就可以通过<code>your_username.github.io</code>来访问我们的博客主页了，但是我们如果要修改GitHub的域名的话是改不了的，只有我们自己去购买域名，然后通过域名解析将我们的GitHub主页的域名解析到我们自己买的域名上面，这样我们就可以通过我们自定义的域名来访问我们的博客了。</p>
+<h3 id="购买域名"><a href="#购买域名" class="headerlink" title="购买域名"></a>购买域名</h3><p>购买域名可以在域名提供商购买一个价格合适的个人域名，在这里我用阿里云的上注册购买，阿里云直接用支付宝登陆就行，而且还有部分域名可以1元首年购买的优惠，打开阿里云域名注册<a href="https://wanwang.aliyun.com/" target="_blank" rel="noopener">官网</a>，然后输入自己想要的域名，当然你也可以选中1元的域名，输入完点查询<br><img src="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/39809222.jpg" alt></p>
+<p>然后选择自己想要的域名，加入清单，然后支付<br><img src="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/45361410.jpg" alt></p>
+<p>支付完成后我们点击右上角的控制台，进入我们的管理界面，然后打开<code>域名与网站（万网）</code>，里面就能看到我们刚刚购买的域名了<br><img src="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/51850127.jpg" alt></p>
+<h3 id="绑定域名"><a href="#绑定域名" class="headerlink" title="绑定域名"></a>绑定域名</h3><p>购买完域名后，我们需要在博客目录下的\source目录下建立<code>CNAME</code>文件（没有后缀名、全部大写），写入你所购买的域名地址。这里我写入的www.jowanxu.top。<br><img src="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/93292648.jpg" alt></p>
+<p>然后我们来绑定我们的GitHub主页，继续在阿里云管理控制台，然后选择<code>云解析DNS</code>选项界面<br><img src="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/65445711.jpg" alt></p>
+<p>然后点击我们的域名，进入解析设置<br><img src="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/90978575.jpg" alt></p>
+<p>默认会有两个解析，一个是<code>CHAME</code>，一个是<code>A</code>，<code>CHAME</code>里面输入我们的GitHub主页<code>your_username.github.io</code>，<code>A</code>那里输入我们GitHub主页的IP，如何获取主页IP呢，通过命令行的<code>ping</code>来获取<br><img src="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/99228220.jpg" alt><br>然后保存就OK啦。</p>
+<hr>
+<h3 id="GitHub设置"><a href="#GitHub设置" class="headerlink" title="GitHub设置"></a>GitHub设置</h3><p>上面弄完之后，我们还需要在我们GitHub仓库上面修改我们的<code>source</code>，才能搞定，打开我们的仓库，然后点击<code>Settings</code><br><img src="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/22050198.jpg" alt></p>
+<p>然后找到<code>GitHub Pages</code>，将<code>source</code>改为<code>master branch</code>，然后保存<br><img src="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/79752783.jpg" alt></p>
+<p>并且填入我们自己购买的域名地址，然后保存<br><img src="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/26971944.jpg" alt></p>
+<p>然后我们就能收到创建成功的邮件了。<br><img src="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/27127728.jpg" alt></p>
+<p>最后我们的<code>GitHub Pagers</code>里面是这样子的，证明成功了<br><img src="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/44537051.jpg" alt></p>
+<p>然后我们就能通过自己购买的域名来直接访问到我们放在GitHub上面的个人博客了，如<a href="https://www.jowanxu.top/">我的博客</a>。<br><img src="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/55568569.jpg" alt></p>
+<hr>
+<p>如果你觉得默认自带的主题不好看，可以自己去捣鼓其他的主题，Hexo支持特别多的主题，可以在这个<a href="https://hexo.io/themes/" target="_blank" rel="noopener">网址</a>上选择自己喜欢的，我这里用到的主题是<a href="http://theme-next.iissnan.com/getting-started.html" target="_blank" rel="noopener">NexT</a>主题。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    Jowan
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://www.jowanxu.top/2017/09/02/通过GitHub和Hexo来搭建自己的个人博客/" title="通过GitHub和Hexo来搭建自己的个人博客">https://www.jowanxu.top/2017/09/02/通过GitHub和Hexo来搭建自己的个人博客/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Hexo/" rel="tag"><i class="fa fa-tag"></i> Hexo</a>
+          
+            <a href="/tags/GitHub/" rel="tag"><i class="fa fa-tag"></i> GitHub</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/07/07/Kotlin_learn_advanceFun/" rel="next" title="Kotlin学习_run/let/apply/with的区别">
+                <i class="fa fa-chevron-left"></i> Kotlin学习_run/let/apply/with的区别
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/09/17/Kotlin_learn_whenCaseFull/" rel="prev" title="Kotlin学习_when需写全case条件">
+                Kotlin学习_when需写全case条件 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zMjA1My84NjE3"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="Jowan">
+          <p class="site-author-name" itemprop="name">Jowan</p>
+           
+              <p class="site-description motion-element" itemprop="description">叫我旺仔<br>Android Developer</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">49</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">70</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://plus.google.com/u/0/111824269044709365866" target="_blank" title="Google">
+                  
+                    <i class="fa fa-fw fa-google"></i>
+                  
+                    
+                      Google
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/wangzailfm" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/809077554" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                    
+                      Weibo
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="673173629@qq.com" target="_blank" title="E-Mail">
+                  
+                    <i class="fa fa-fw fa-envelope"></i>
+                  
+                    
+                      E-Mail
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/u011976726" target="_blank" title="CSDN">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      CSDN
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.jianshu.com/u/5509a21c1623" target="_blank" title="Jianshu">
+                  
+                    <i class="fa fa-fw fa-book"></i>
+                  
+                    
+                      Jianshu
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-block">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              Links
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://wanandroid.com/" title="玩Android" target="_blank">玩Android</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://blog.csdn.net/lmj623565791?viewmode=contents" title="HongYang" target="_blank">HongYang</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="https://lgzh1215.github.io/" title="萌雀" target="_blank">萌雀</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://ice1000.org/" title="冰封" target="_blank">冰封</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#GitHub主页"><span class="nav-number">1.</span> <span class="nav-text">GitHub主页</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#创建仓库"><span class="nav-number">1.1.</span> <span class="nav-text">创建仓库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#设置Pages"><span class="nav-number">1.2.</span> <span class="nav-text">设置Pages</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Clone仓库"><span class="nav-number">1.3.</span> <span class="nav-text">Clone仓库</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#安装Git"><span class="nav-number">1.3.1.</span> <span class="nav-text">安装Git</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#配置Git参数"><span class="nav-number">1.3.2.</span> <span class="nav-text">配置Git参数</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#添加SSH-Key"><span class="nav-number">1.3.2.1.</span> <span class="nav-text">添加SSH Key</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#ssh-agent"><span class="nav-number">1.3.2.2.</span> <span class="nav-text">ssh-agent</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Hexo框架"><span class="nav-number">1.4.</span> <span class="nav-text">Hexo框架</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Hexo常用命令"><span class="nav-number">1.4.1.</span> <span class="nav-text">Hexo常用命令</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#new"><span class="nav-number">1.4.1.1.</span> <span class="nav-text">new</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#generate"><span class="nav-number">1.4.1.2.</span> <span class="nav-text">generate</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#server"><span class="nav-number">1.4.1.3.</span> <span class="nav-text">server</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#deploy"><span class="nav-number">1.4.1.4.</span> <span class="nav-text">deploy</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#clean"><span class="nav-number">1.4.1.5.</span> <span class="nav-text">clean</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Hexo配置Git"><span class="nav-number">1.4.2.</span> <span class="nav-text">Hexo配置Git</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#域名"><span class="nav-number">2.</span> <span class="nav-text">域名</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#购买域名"><span class="nav-number">2.1.</span> <span class="nav-text">购买域名</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#绑定域名"><span class="nav-number">2.2.</span> <span class="nav-text">绑定域名</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GitHub设置"><span class="nav-number">2.3.</span> <span class="nav-text">GitHub设置</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy;  2017 - 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jowan</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

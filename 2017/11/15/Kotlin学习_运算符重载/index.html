@@ -1,0 +1,1451 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+  <meta name="google-site-verification" content="vjImUBDCK8Rg9G13vkIip_GUsZTtVV6s-XdSk81-jzA">
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="Kotlin,Operator,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="旺仔的个人博客" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.png?v=5.1.2">
+
+
+
+
+
+
+<meta name="description" content="在前面写了关于集合和范围的内容，里面包括了一点运算符重载的内容，在这里我们来详细了解运算符重载的知识，内容参考《Kotlin实战》（Kotlin in Action）。 什么是运算符重载？ 简单来说，就是Kotlin通过调用自己代码中定义特定的函数名的函数（成员函数或者扩展函数），并且用operator修饰符标记，来实现特定的语言结构，例如如果你在一个类上面定义了一个特定函数命名plus的函数，那">
+<meta name="keywords" content="Kotlin,Operator">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Kotlin学习_运算符重载">
+<meta property="og:url" content="https://www.jowanxu.top/2017/11/15/Kotlin学习_运算符重载/index.html">
+<meta property="og:site_name" content="旺仔的个人博客">
+<meta property="og:description" content="在前面写了关于集合和范围的内容，里面包括了一点运算符重载的内容，在这里我们来详细了解运算符重载的知识，内容参考《Kotlin实战》（Kotlin in Action）。 什么是运算符重载？ 简单来说，就是Kotlin通过调用自己代码中定义特定的函数名的函数（成员函数或者扩展函数），并且用operator修饰符标记，来实现特定的语言结构，例如如果你在一个类上面定义了一个特定函数命名plus的函数，那">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/94785752.jpg">
+<meta property="og:image" content="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/32193310.jpg">
+<meta property="og:image" content="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/972215.jpg">
+<meta property="og:image" content="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/1427582.jpg">
+<meta property="og:image" content="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/24413959.jpg">
+<meta property="og:image" content="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/20603482.jpg">
+<meta property="og:image" content="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/58582474.jpg">
+<meta property="og:image" content="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/96591427.jpg">
+<meta property="og:image" content="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/4382299.jpg">
+<meta property="og:image" content="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/11588706.jpg">
+<meta property="og:updated_time" content="2019-08-27T12:18:42.389Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Kotlin学习_运算符重载">
+<meta name="twitter:description" content="在前面写了关于集合和范围的内容，里面包括了一点运算符重载的内容，在这里我们来详细了解运算符重载的知识，内容参考《Kotlin实战》（Kotlin in Action）。 什么是运算符重载？ 简单来说，就是Kotlin通过调用自己代码中定义特定的函数名的函数（成员函数或者扩展函数），并且用operator修饰符标记，来实现特定的语言结构，例如如果你在一个类上面定义了一个特定函数命名plus的函数，那">
+<meta name="twitter:image" content="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/94785752.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://www.jowanxu.top/2017/11/15/Kotlin学习_运算符重载/">
+
+
+
+
+
+  <title>Kotlin学习_运算符重载 | 旺仔的个人博客</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">旺仔的个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">叫我旺仔<br>Android Developer</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br>
+            
+            公益
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://www.jowanxu.top/2017/11/15/Kotlin学习_运算符重载/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Jowan">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="旺仔的个人博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Kotlin学习_运算符重载</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-15T08:34:52+08:00">
+                2017-11-15
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2019-08-27T20:18:42+08:00">
+                2019-08-27
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kotlin/" itemprop="url" rel="index">
+                    <span itemprop="name">Kotlin</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <br>
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">文章字数</span>
+                
+                <span title="文章字数">
+                   字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长需</span>
+                
+                <span title="阅读时长需">
+                   分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>在前面写了关于集合和范围的内容，里面包括了一点运算符重载的内容，在这里我们来详细了解运算符重载的知识，内容参考《Kotlin实战》（Kotlin in Action）。</p>
+<p>什么是运算符重载？</p>
+<p>简单来说，就是Kotlin通过调用自己代码中定义特定的函数名的函数（成员函数或者扩展函数），并且用<code>operator</code>修饰符标记，来实现特定的语言结构，例如如果你在一个类上面定义了一个特定函数命名<code>plus</code>的函数，那么按照Kotlin的约定，可用在这个类的实例上使用<code>+</code>运算符，下面是代码。</p>
+<blockquote>
+<p>用于重载运算符的所有函数都必须使用<code>operator</code>关键字标记。</p>
+</blockquote>
+<a id="more"></a>
+<p><img src="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/94785752.jpg" alt="日本编程丛书-图片源于网络"></p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 一个简单的数据类</span></span><br><span class="line"><span class="keyword">data</span> <span class="class"><span class="keyword">class</span> <span class="title">Foo</span></span>(<span class="keyword">val</span> x: <span class="built_in">Int</span>, <span class="keyword">val</span> y: <span class="built_in">Int</span>) &#123;</span><br><span class="line">    <span class="keyword">operator</span> <span class="function"><span class="keyword">fun</span> <span class="title">plus</span><span class="params">(other: <span class="type">Foo</span>)</span></span> : Foo = Foo(x + other.x, y + other.y)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">main</span><span class="params">(args: <span class="type">Array</span>&lt;<span class="type">String</span>&gt;)</span></span> &#123;</span><br><span class="line">    <span class="comment">// 使用的时候</span></span><br><span class="line">    <span class="keyword">val</span> f1 = Foo(<span class="number">10</span>, <span class="number">20</span>)</span><br><span class="line">    <span class="keyword">val</span> f2 = Foo(<span class="number">30</span>, <span class="number">40</span>)</span><br><span class="line">    <span class="comment">// 直接用+运算符代替plus函数，事实上会调用plus函数</span></span><br><span class="line">    println(f1 + f2) <span class="comment">// 打印内容为Foo(x=40, y=60)</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>那么Java如何调用运算符函数呢？</p>
+<p>重载的运算符实际上是被定义成一个函数，Java调用Kotlin运算符就跟调用普通函数一样调用就行。</p>
+<h3 id="重载算术运算符"><a href="#重载算术运算符" class="headerlink" title="重载算术运算符"></a>重载算术运算符</h3><p>算术运算符包括二元运算符、复合赋值运算符、一元运算符，当Kotlin在给一个集合添加元素的时候，是调用add方法，用到重载的话，我们就可以直接用<code>+=</code>来进行这个操作，就会显得更加的优雅。。。<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fun</span> Any.<span class="title">println</span><span class="params">()</span></span> = println(<span class="keyword">this</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">main</span><span class="params">(args: <span class="type">Array</span>&lt;<span class="type">String</span>&gt;)</span></span> &#123;</span><br><span class="line">    <span class="keyword">val</span> list = arrayListOf(<span class="number">1</span>, <span class="number">2</span> ,<span class="number">3</span>)</span><br><span class="line">    list.println() <span class="comment">// 打印[1, 2, 3]</span></span><br><span class="line">    list.add(<span class="number">4</span>)</span><br><span class="line">    list.println() <span class="comment">// 打印[1, 2, 3, 4]</span></span><br><span class="line">    list += <span class="number">5</span></span><br><span class="line">    list.println() <span class="comment">// 打印[1, 2, 3, 4, 5]</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="重载二元算术运算符"><a href="#重载二元算术运算符" class="headerlink" title="重载二元算术运算符"></a>重载二元算术运算符</h4><p>二元算术运算符就是常见的<code>+</code>、<code>-</code>、<code>*</code>、<code>/</code>和取余<code>%</code>，优先级与数学的是一样的，<code>*</code>、<code>/</code>和<code>%</code>要高于<code>+</code>、<code>-</code>的优先级。</p>
+<p>下面我们列举对应的函数名：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">表达式</th>
+<th style="text-align:center">函数名</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><code>a * b</code></td>
+<td style="text-align:center"><code>times</code></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>a / b</code></td>
+<td style="text-align:center"><code>div</code></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>a % b</code></td>
+<td style="text-align:center"><code>rem</code>,<code>mod(弃用)</code></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>a + b</code></td>
+<td style="text-align:center"><code>plus</code></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>a - b</code></td>
+<td style="text-align:center"><code>minus</code></td>
+</tr>
+</tbody>
+</table>
+<p>下面我们来写个类，里面包含这几种函数，同时还有扩展函数的定义。</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> Any.<span class="title">println</span><span class="params">()</span></span> = println(<span class="keyword">this</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// Extension</span></span><br><span class="line"><span class="keyword">operator</span> <span class="function"><span class="keyword">fun</span> Foo.<span class="title">minus</span><span class="params">(other: <span class="type">Foo</span>)</span></span>: Foo = Foo(x - other.x, y - other.y)</span><br><span class="line"><span class="keyword">operator</span> <span class="function"><span class="keyword">fun</span> Foo.<span class="title">div</span><span class="params">(other: <span class="type">Foo</span>)</span></span>: Foo = Foo(x / other.x, y / other.y)</span><br><span class="line"></span><br><span class="line"><span class="keyword">data</span> <span class="class"><span class="keyword">class</span> <span class="title">Foo</span></span>(<span class="keyword">val</span> x: <span class="built_in">Int</span>, <span class="keyword">val</span> y: <span class="built_in">Int</span>) &#123;</span><br><span class="line">    <span class="keyword">operator</span> <span class="function"><span class="keyword">fun</span> <span class="title">plus</span><span class="params">(other: <span class="type">Foo</span>)</span></span>: Foo = Foo(x + other.x, y + other.y)</span><br><span class="line">    <span class="keyword">operator</span> <span class="function"><span class="keyword">fun</span> <span class="title">times</span><span class="params">(other: <span class="type">Foo</span>)</span></span>: Foo = Foo(x * other.x, y * other.y)</span><br><span class="line">    <span class="keyword">operator</span> <span class="function"><span class="keyword">fun</span> <span class="title">rem</span><span class="params">(other: <span class="type">Foo</span>)</span></span>: Foo = Foo(x % other.x, y % other.y)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">main</span><span class="params">(args: <span class="type">Array</span>&lt;<span class="type">String</span>&gt;)</span></span> &#123;</span><br><span class="line">    <span class="keyword">val</span> f1 = Foo(<span class="number">30</span>, <span class="number">40</span>)</span><br><span class="line">    <span class="keyword">val</span> f2 = Foo(<span class="number">10</span>, <span class="number">20</span>)</span><br><span class="line">    (f1 - f2).println() <span class="comment">// 打印Foo(x=20, y=20)</span></span><br><span class="line">    (f1 + f2).println() <span class="comment">// 打印Foo(x=40, y=60)</span></span><br><span class="line">    (f1 * f2).println() <span class="comment">// 打印Foo(x=300, y=800)</span></span><br><span class="line">    (f1 / f2).println() <span class="comment">// 打印Foo(x=3, y=2)</span></span><br><span class="line">    (f1 % f2).println() <span class="comment">// 打印Foo(x=0, y=0)</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>除了定义相同类型的运算数之外，还能定义运算数类型不同的运算符：<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">data</span> <span class="class"><span class="keyword">class</span> <span class="title">Foo</span></span>(<span class="keyword">val</span> x: <span class="built_in">Int</span>, <span class="keyword">val</span> y: <span class="built_in">Int</span>) &#123;</span><br><span class="line">    <span class="keyword">operator</span> <span class="function"><span class="keyword">fun</span> <span class="title">times</span><span class="params">(other: <span class="type">Double</span>)</span></span>: Foo = Foo((x * other).toInt(), (y * other).toInt())</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">main</span><span class="params">(args: <span class="type">Array</span>&lt;<span class="type">String</span>&gt;)</span></span> &#123;</span><br><span class="line">    <span class="keyword">val</span> f1 = Foo(<span class="number">30</span>, <span class="number">40</span>)</span><br><span class="line">    (f1 * <span class="number">1.5</span>).println() <span class="comment">// 打印Foo(x=45, y=60)</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>当你通过这样子去调用这个运算符的时候<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="number">1.5</span> * f1).println()</span><br></pre></td></tr></table></figure></p>
+<p>这时候，编译器会提示你出错了</p>
+<p><img src="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/32193310.jpg" alt></p>
+<p>为什么会这样呢？</p>
+<p><img src="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/972215.jpg" alt></p>
+<p>因为Kotlin的运算符不会自动至此<strong>交换性</strong>（交换运算符的左右两边）。</p>
+<p>那要怎么样才能那样写呢？</p>
+<p><img src="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/1427582.jpg" alt></p>
+<p>需要定义一个单独的运算符<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">operator</span> <span class="function"><span class="keyword">fun</span> <span class="built_in">Double</span>.<span class="title">times</span><span class="params">(other: <span class="type">Foo</span>)</span></span>: Foo = Foo((<span class="keyword">this</span> * other.x).toInt(), (<span class="keyword">this</span> * other.y).toInt())</span><br></pre></td></tr></table></figure></p>
+<p>这样子就能直接支持运算符两边互换使用了。。。<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(f1 * <span class="number">1.5</span>).println()</span><br><span class="line">(<span class="number">1.5</span> * f1).println()</span><br></pre></td></tr></table></figure></p>
+<p>运算符函数不是单一返回类型的，也是可以定义不同的返回类型，下面举个栗子：<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">operator</span> <span class="function"><span class="keyword">fun</span> <span class="built_in">Char</span>.<span class="title">times</span><span class="params">(count: <span class="type">Int</span>)</span></span>: String = toString().repeat(count)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">main</span><span class="params">(args: <span class="type">Array</span>&lt;<span class="type">String</span>&gt;)</span></span> &#123;</span><br><span class="line">    (<span class="string">'a'</span> * <span class="number">3</span>).println() <span class="comment">// 打印aaa</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>在上面的代码中，这个运算符是<code>Char</code>类型的扩展函数，参数类型是<code>Int</code>类型，所以是<code>Char * Int</code>这样的操作，返回类型是<code>String</code>。</p>
+<blockquote>
+<p>注意：运算符和普通函数一样，可以重载operator函数，可以定义多个同名，但是参数不一样的方法。</p>
+</blockquote>
+<h4 id="重载复合赋值运算符"><a href="#重载复合赋值运算符" class="headerlink" title="重载复合赋值运算符"></a>重载复合赋值运算符</h4><p>什么是复合赋值运算符？<br>类似于<code>+=</code>这样的，合并了两部操作的运算符，同时赋值，称为符合运算符。</p>
+<p>下面我们列举对应的函数名：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">表达式</th>
+<th style="text-align:center">函数名</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><code>a += b</code></td>
+<td style="text-align:center"><code>timesAssign</code></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>a /= b</code></td>
+<td style="text-align:center"><code>divAssign</code></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>a %= b</code></td>
+<td style="text-align:center"><code>remAssign</code></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>a += b</code></td>
+<td style="text-align:center"><code>plusAssign</code></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>a -= b</code></td>
+<td style="text-align:center"><code>minusAssign</code></td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">main</span><span class="params">(args: <span class="type">Array</span>&lt;<span class="type">String</span>&gt;)</span></span> &#123;</span><br><span class="line">    <span class="keyword">var</span> f1 = Foo(<span class="number">1</span>, <span class="number">2</span>)</span><br><span class="line">    f1 += Foo(<span class="number">3</span>, <span class="number">4</span>)</span><br><span class="line">    f1.println() <span class="comment">// 打印Foo(x=4, y=6)</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面的<code>+=</code>等同于<code>f1 = f1 + Foo(3, 4)</code>，这些操作当然是只对可变变量有效的。</p>
+<p>默认情况下，复合赋值运算符是可以修改变量所引用的对象，同时重新分配引用，但是在将一个元素添加到一个可变集合的时候，<code>+=</code>是不会重新分配引用的：<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">main</span><span class="params">(args: <span class="type">Array</span>&lt;<span class="type">String</span>&gt;)</span></span> &#123;</span><br><span class="line">    <span class="keyword">val</span> list = mutableListOf&lt;<span class="built_in">Int</span>&gt;()</span><br><span class="line">    list += <span class="number">42</span></span><br><span class="line">    list.println() <span class="comment">// 打印[42]</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>同样我们可以对复合赋值运算符进行重载，同样可以定义多个同名，但是参数不一样的方法：<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">operator</span> <span class="function"><span class="keyword">fun</span> MutableCollection<span class="type">&lt;Int&gt;</span>.<span class="title">plusAssign</span><span class="params">(element: <span class="type">Int</span>)</span></span> &#123;</span><br><span class="line">    <span class="keyword">this</span>.add(element - <span class="number">1</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">main</span><span class="params">(args: <span class="type">Array</span>&lt;<span class="type">String</span>&gt;)</span></span> &#123;</span><br><span class="line">    <span class="keyword">val</span> list = mutableListOf&lt;<span class="built_in">Int</span>&gt;()</span><br><span class="line">    list += <span class="number">42</span></span><br><span class="line">    list.println() <span class="comment">// 打印[41]</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>如果在<code>plus</code>和<code>plusAssign</code>两个函数同时被定义且适用，那么编译器就会报错，最好在设计新类的时候保持（可变性）一致，尽量不同时定义<code>plus</code>和<code>plusAssign</code>运算。如<code>Foo</code>类是不可变的，那么只提供<code>plus</code>运算，如果一个类是可变的，如构造器，那么只需提供<code>plusAssign</code>和类似的运算就够了。</p>
+<p><img src="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/24413959.jpg" alt></p>
+<p>实际上<code>+=</code>可以被转换为<code>plus</code>或者<code>plusAssign</code>函数调用，而Kotlin的标准库中为集合支持这两种方法。</p>
+<ul>
+<li><code>+</code>和<code>-</code>运算符会返回一个新的集合。</li>
+<li><code>+=</code>和<code>-=</code>用于可变集合，会修改集合，如果是只读，那么就会返回一个修改过的副本，也就是说只有在只读集合被定义为var类型的时候，才能使用<code>+=</code>和<code>-=</code>。</li>
+</ul>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">main</span><span class="params">(args: <span class="type">Array</span>&lt;<span class="type">String</span>&gt;)</span></span> &#123;</span><br><span class="line">    <span class="comment">// 可变类型</span></span><br><span class="line">    <span class="keyword">val</span> list = mutableListOf&lt;<span class="built_in">Int</span>&gt;(<span class="number">1</span>, <span class="number">2</span>)</span><br><span class="line">    <span class="comment">// += 修改list</span></span><br><span class="line">    list += <span class="number">3</span></span><br><span class="line">    <span class="comment">// + 返回一个新的List</span></span><br><span class="line">    <span class="keyword">val</span> newList = list + listOf&lt;<span class="built_in">Int</span>&gt;(<span class="number">4</span>, <span class="number">5</span>) <span class="comment">// 除了使用单个元素参数，也可使用元素类型相同的集合</span></span><br><span class="line">    list.println() <span class="comment">// 打印[1, 2, 3]</span></span><br><span class="line">    newList.println() <span class="comment">// 打印[1, 2, 3, 4, 5]</span></span><br><span class="line">    <span class="keyword">var</span> varList = listOf&lt;<span class="built_in">Int</span>&gt;(<span class="number">1</span>, <span class="number">2</span>)</span><br><span class="line">    <span class="comment">// 只读集合类型为var</span></span><br><span class="line">    varList.println() <span class="comment">// 打印[1, 2]</span></span><br><span class="line">    varList += <span class="number">3</span></span><br><span class="line">    varList.println() <span class="comment">// 打印[1, 2, 3]</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="重载一元运算符"><a href="#重载一元运算符" class="headerlink" title="重载一元运算符"></a>重载一元运算符</h4><p>Kotlin中允许重载一元运算符，如<code>-a</code>,<code>+a</code>等等，同样我们列举支持的一元运算符和对应的函数名：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">表达式</th>
+<th style="text-align:center">函数名</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><code>+a</code></td>
+<td style="text-align:center"><code>unaryPlus</code></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>-a</code></td>
+<td style="text-align:center"><code>unaryMinus</code></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>!a</code></td>
+<td style="text-align:center"><code>not</code></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>++a, a++</code></td>
+<td style="text-align:center"><code>inc</code></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>--a, a--</code></td>
+<td style="text-align:center"><code>dec</code></td>
+</tr>
+</tbody>
+</table>
+<p>重载一元运算符过程与前面一样，通过预先定义的一个名称来声明函数（成员函数或者扩展函数），并且用<code>operator</code>修饰符标记。</p>
+<blockquote>
+<p>注意：一元运算符是没有参数的。</p>
+</blockquote>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">data</span> <span class="class"><span class="keyword">class</span> <span class="title">Foo</span></span>(<span class="keyword">val</span> x: <span class="built_in">Int</span>, <span class="keyword">val</span> y: <span class="built_in">Int</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">operator</span> <span class="function"><span class="keyword">fun</span> Foo.<span class="title">unaryMinus</span><span class="params">()</span></span> = Foo(-x, -y)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">main</span><span class="params">(args: <span class="type">Array</span>&lt;<span class="type">String</span>&gt;)</span></span> &#123;</span><br><span class="line">    <span class="keyword">val</span> f1 = Foo(<span class="number">1</span>, <span class="number">2</span>)</span><br><span class="line">    (-f1).println() <span class="comment">// 打印Foo(x=-1, y=-2)</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>当重载自增自减运算符符是，编译器自动支持前缀<code>--a</code>和后缀<code>a--</code>语义。<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">operator</span> <span class="function"><span class="keyword">fun</span> BigDecimal.<span class="title">inc</span><span class="params">()</span></span> = <span class="keyword">this</span> + BigDecimal.ONE</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">main</span><span class="params">(args: <span class="type">Array</span>&lt;<span class="type">String</span>&gt;)</span></span> &#123;</span><br><span class="line">    <span class="keyword">var</span> bd = <span class="number">0</span></span><br><span class="line">    (bd++).println() <span class="comment">// 打印0</span></span><br><span class="line">    (++bd).println() <span class="comment">// 打印2</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="重载比较运算符"><a href="#重载比较运算符" class="headerlink" title="重载比较运算符"></a>重载比较运算符</h3><p>比较运算符，可以在除了基本数据类型外的任意对象上使用，当Java中使用<code>equals</code>或<code>compareTo</code>时，在Kotlin中，直接用运算符重载。<br>比较运算符分为等号运算符和排序运算符。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">表达式</th>
+<th style="text-align:center">函数名</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><code>a == b</code></td>
+<td style="text-align:center"><code>a?.equals(b) ?: (b === null)</code></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>a != b</code></td>
+<td style="text-align:center"><code>!(a?.equals(b) ?: (b === null))</code></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>a &gt; b</code></td>
+<td style="text-align:center"><code>a.compareTo(b) &gt; 0</code></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>a &lt; b</code></td>
+<td style="text-align:center"><code>a.compareTo(b) &lt; 0</code></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>a &gt;= b</code></td>
+<td style="text-align:center"><code>a.compareTo(b) &gt;= 0</code></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>a &lt;= b</code></td>
+<td style="text-align:center"><code>a.compareTo(b) &lt;= 0</code></td>
+</tr>
+</tbody>
+</table>
+<h4 id="等号运算符equals"><a href="#等号运算符equals" class="headerlink" title="等号运算符equals"></a>等号运算符<code>equals</code></h4><p>在我们平时使用判断字符串是否与某个字符串相等的时候，会使用<code>equals</code>函数来判断，然而在Kotlin中，我们可以是用<code>==</code>来代替<code>equals</code>函数，<code>~=</code>来代替<code>!qeuals</code>。<br>在Java中如果使用null对象来<code>equals</code>的话，会爆空指针异常，而Kotlin中的<code>==</code>是支持可空类型的，因为会先判断是否为空，如<code>a == b</code>会先检查<code>a</code>是否为空，如果不是，就会调用<code>a.equals(b)</code>，否则只有两个参数都是空值，结果才为真。</p>
+<p><img src="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/20603482.jpg" alt></p>
+<p>下面我们来重载<code>equals</code>运算符<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">data</span> <span class="class"><span class="keyword">class</span> <span class="title">Foo</span></span>(<span class="keyword">val</span> x: <span class="built_in">Int</span>, <span class="keyword">val</span> y: <span class="built_in">Int</span>) &#123;</span><br><span class="line">    <span class="keyword">override</span> <span class="keyword">operator</span> <span class="function"><span class="keyword">fun</span> <span class="title">equals</span><span class="params">(other: <span class="type">Any</span>?)</span></span>: <span class="built_in">Boolean</span> = <span class="keyword">when</span> &#123;</span><br><span class="line">        <span class="comment">// 使用恒等运算符来判断两个参数是否同一个对象的引用</span></span><br><span class="line">        other === <span class="keyword">this</span> -&gt; <span class="literal">true</span></span><br><span class="line">        other !<span class="keyword">is</span> Foo -&gt; <span class="literal">false</span></span><br><span class="line">        <span class="keyword">else</span> -&gt; other.x == x &amp;&amp; other.y == y</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">main</span><span class="params">(args: <span class="type">Array</span>&lt;<span class="type">String</span>&gt;)</span></span> &#123;</span><br><span class="line">    <span class="keyword">val</span> f1 = Foo(<span class="number">1</span>, <span class="number">2</span>)</span><br><span class="line">    <span class="keyword">val</span> f2 = Foo(<span class="number">1</span>, <span class="number">2</span>)</span><br><span class="line">    <span class="keyword">val</span> f3 = Foo(<span class="number">10</span>, <span class="number">20</span>)</span><br><span class="line">    (f1 == f2).println() <span class="comment">// true</span></span><br><span class="line">    (f1 == f2).println() <span class="comment">// true</span></span><br><span class="line">    (f1 != f2).println() <span class="comment">// false</span></span><br><span class="line">    (<span class="literal">null</span> == f1).println() <span class="comment">// false</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>注意：<code>===</code>与Java一样，检查两个参数是否是同一个对象的引用，如果是基本数据类型，检查值是否相同，<code>===</code>和<code>!==</code>不能被重载。</p>
+</blockquote>
+<h4 id="排序运算符compareTo"><a href="#排序运算符compareTo" class="headerlink" title="排序运算符compareTo"></a>排序运算符<code>compareTo</code></h4><p>在Java中，基本数据类型集合排序通常都是使用<code>&lt;</code>和<code>&gt;</code>来比较，而其他类型需要使用<code>element1.compareTo(element2)</code>来比较的。而在Kotlin中，通过使用比较运算符(<code>&gt;``&lt;``&gt;=``&lt;=</code>)来进行比较。</p>
+<p><img src="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/58582474.jpg" alt></p>
+<p>比较运算符会被转换成<code>compareTo</code>函数，<code>compareTo</code>的返回类型必须为<code>Int</code>。<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span></span>(<span class="keyword">private</span> <span class="keyword">val</span> firstName: String, <span class="keyword">private</span> <span class="keyword">val</span> lastName: String) : Comparable&lt;Person&gt; &#123;</span><br><span class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">compareTo</span><span class="params">(other: <span class="type">Person</span>)</span></span>: <span class="built_in">Int</span> = compareValuesBy(<span class="keyword">this</span>, other, Person::lastName, Person::firstName)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">main</span><span class="params">(args: <span class="type">Array</span>&lt;<span class="type">String</span>&gt;)</span></span> &#123;</span><br><span class="line">    (Person(<span class="string">"Alice"</span>, <span class="string">"Smith"</span>) &lt; Person(<span class="string">"Bob"</span>, <span class="string">"Johnson"</span>)).println() <span class="comment">// 打印false</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><code>compareValuesBy</code>函数是按顺序依次调用回调方法，两两一组分别做比较，然后返回结果，如果则返回比较结果，如果相同，则继续调用下一个，如果没有更多回调来调用，则返回0。</p>
+<p><img src="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/96591427.jpg" alt></p>
+<h4 id="override标记"><a href="#override标记" class="headerlink" title="override标记"></a><code>override</code>标记</h4><p><img src="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/4382299.jpg" alt="Any"></p>
+<p><img src="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/11588706.jpg" alt="Comparable"></p>
+<p>从上面可以看到，<code>equals</code>和<code>compareTo</code>都是被<code>override</code>标记的，之所以会被标记，是因为在<code>Any</code>类中已经定义了<code>equals</code>函数，而所有的对象都默认继承<code>Any</code>类，所有才重载的时候需要使用<code>override</code>标记，而且<code>equals</code>不能定义为扩展函数，因为<code>Any</code>类的实现是重要优先于扩展函数。<br>同样，<code>compareTo</code>在<code>Comparable</code>接口中已经定义了，所有在重载的时候，需要使用<code>override</code>标记。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    Jowan
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://www.jowanxu.top/2017/11/15/Kotlin学习_运算符重载/" title="Kotlin学习_运算符重载">https://www.jowanxu.top/2017/11/15/Kotlin学习_运算符重载/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Kotlin/" rel="tag"><i class="fa fa-tag"></i> Kotlin</a>
+          
+            <a href="/tags/Operator/" rel="tag"><i class="fa fa-tag"></i> Operator</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/10/30/Kotlin学习_关键字与操作符/" rel="next" title="Kotlin学习_关键字与操作符（Keywords and Operators）">
+                <i class="fa fa-chevron-left"></i> Kotlin学习_关键字与操作符（Keywords and Operators）
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/11/22/Kotlin学习_委托模式和委托属性/" rel="prev" title="Kotlin学习_委托模式（Delegate）和委托属性（Delegate Properties）">
+                Kotlin学习_委托模式（Delegate）和委托属性（Delegate Properties） <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zMjA1My84NjE3"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="Jowan">
+          <p class="site-author-name" itemprop="name">Jowan</p>
+           
+              <p class="site-description motion-element" itemprop="description">叫我旺仔<br>Android Developer</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">49</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">70</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://plus.google.com/u/0/111824269044709365866" target="_blank" title="Google">
+                  
+                    <i class="fa fa-fw fa-google"></i>
+                  
+                    
+                      Google
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/wangzailfm" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/809077554" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                    
+                      Weibo
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="673173629@qq.com" target="_blank" title="E-Mail">
+                  
+                    <i class="fa fa-fw fa-envelope"></i>
+                  
+                    
+                      E-Mail
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/u011976726" target="_blank" title="CSDN">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      CSDN
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.jianshu.com/u/5509a21c1623" target="_blank" title="Jianshu">
+                  
+                    <i class="fa fa-fw fa-book"></i>
+                  
+                    
+                      Jianshu
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-block">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              Links
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://wanandroid.com/" title="玩Android" target="_blank">玩Android</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://blog.csdn.net/lmj623565791?viewmode=contents" title="HongYang" target="_blank">HongYang</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="https://lgzh1215.github.io/" title="萌雀" target="_blank">萌雀</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://ice1000.org/" title="冰封" target="_blank">冰封</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#重载算术运算符"><span class="nav-number">1.</span> <span class="nav-text">重载算术运算符</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#重载二元算术运算符"><span class="nav-number">1.1.</span> <span class="nav-text">重载二元算术运算符</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#重载复合赋值运算符"><span class="nav-number">1.2.</span> <span class="nav-text">重载复合赋值运算符</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#重载一元运算符"><span class="nav-number">1.3.</span> <span class="nav-text">重载一元运算符</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#重载比较运算符"><span class="nav-number">2.</span> <span class="nav-text">重载比较运算符</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#等号运算符equals"><span class="nav-number">2.1.</span> <span class="nav-text">等号运算符equals</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#排序运算符compareTo"><span class="nav-number">2.2.</span> <span class="nav-text">排序运算符compareTo</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#override标记"><span class="nav-number">2.3.</span> <span class="nav-text">override标记</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy;  2017 - 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jowan</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

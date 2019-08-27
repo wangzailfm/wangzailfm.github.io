@@ -1,0 +1,1294 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+  <meta name="google-site-verification" content="vjImUBDCK8Rg9G13vkIip_GUsZTtVV6s-XdSk81-jzA">
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="Android,Activity,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="旺仔的个人博客" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.png?v=5.1.2">
+
+
+
+
+
+
+<meta name="description" content="缘由这几天想做一个点击跳转到TIM的扫一扫的Activity的功能，代码是这样的，就是普通的跳转12345678910Intent intent = new Intent();intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);ComponentName component = new ComponentName(&quot;com.tencent.tim&quot;, &quot;c">
+<meta name="keywords" content="Android,Activity">
+<meta property="og:type" content="article">
+<meta property="og:title" content="探究Exported属性对startActivity的影响">
+<meta property="og:url" content="https://www.jowanxu.top/2017/09/28/探究Exported属性对startActivity的影响/index.html">
+<meta property="og:site_name" content="旺仔的个人博客">
+<meta property="og:description" content="缘由这几天想做一个点击跳转到TIM的扫一扫的Activity的功能，代码是这样的，就是普通的跳转12345678910Intent intent = new Intent();intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);ComponentName component = new ComponentName(&quot;com.tencent.tim&quot;, &quot;c">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/20127664.jpg">
+<meta property="og:image" content="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/65162495.jpg">
+<meta property="og:image" content="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/25252611.jpg">
+<meta property="og:updated_time" content="2019-08-27T12:18:42.415Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="探究Exported属性对startActivity的影响">
+<meta name="twitter:description" content="缘由这几天想做一个点击跳转到TIM的扫一扫的Activity的功能，代码是这样的，就是普通的跳转12345678910Intent intent = new Intent();intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);ComponentName component = new ComponentName(&quot;com.tencent.tim&quot;, &quot;c">
+<meta name="twitter:image" content="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/20127664.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://www.jowanxu.top/2017/09/28/探究Exported属性对startActivity的影响/">
+
+
+
+
+
+  <title>探究Exported属性对startActivity的影响 | 旺仔的个人博客</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">旺仔的个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">叫我旺仔<br>Android Developer</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br>
+            
+            公益
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://www.jowanxu.top/2017/09/28/探究Exported属性对startActivity的影响/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Jowan">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="旺仔的个人博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">探究Exported属性对startActivity的影响</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-28T16:18:11+08:00">
+                2017-09-28
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2019-08-27T20:18:42+08:00">
+                2019-08-27
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Activity/" itemprop="url" rel="index">
+                    <span itemprop="name">Activity</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <br>
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">文章字数</span>
+                
+                <span title="文章字数">
+                   字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长需</span>
+                
+                <span title="阅读时长需">
+                   分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="缘由"><a href="#缘由" class="headerlink" title="缘由"></a>缘由</h3><p>这几天想做一个点击跳转到TIM的扫一扫的Activity的功能，代码是这样的，就是普通的跳转<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Intent intent = <span class="keyword">new</span> Intent();</span><br><span class="line">intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);</span><br><span class="line">ComponentName component = <span class="keyword">new</span> ComponentName(<span class="string">"com.tencent.tim"</span>, <span class="string">"com.tencent.biz.qrcode.activity.ScannerActivity"</span>);</span><br><span class="line">intent.setComponent(component);</span><br><span class="line">intent.setAction(<span class="string">"android.intent.action.VIEW"</span>);</span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    startActivity(intent);</span><br><span class="line">&#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">    e.printStackTrace();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>为什么我后面要加try/catch呢，因为不加的话会报异常，然后闪退，报的异常内容如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">java.lang.SecurityException: Permission Denial: </span><br><span class="line">starting Intent &#123; act=android.intent.action.VIEW flg=0x10000000 </span><br><span class="line">cmp=com.tencent.tim/com.tencent.biz.qrcode.activity.ScannerActivity &#125; </span><br><span class="line">from ProcessRecord&#123;e0031ac 25553:top.jowanxu.xposedtest/u0a175&#125; </span><br><span class="line">(pid=25553, uid=10175) not exported from uid 10151</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<h3 id="Exported属性"><a href="#Exported属性" class="headerlink" title="Exported属性"></a>Exported属性</h3><p>wtf？没有权限？然后呢，百度了下，发现是Activity的属性<code>exported</code>的值为false，然后别的app就打不开这个Activity了，如果要打开的话，就必须和这个Activity在同一Application下或者<code>uid</code>相同才行。<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">manifest</span> <span class="attr">xmlns:android</span>=<span class="string">"http://schemas.android.com/apk/res/android"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">...</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:sharedUserId</span>=<span class="string">"com.example.categorytest"</span>&gt;</span></span><br><span class="line">    ...</span><br><span class="line"><span class="tag">&lt;/<span class="name">manifest</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>同一不能打开的还有在没有设置exported属性的时候，也没有设置<code>intent-filter</code>属性的话，也是打不开这个Activity的。<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">activity</span></span></span><br><span class="line"><span class="tag"><span class="attr">android:name</span>=<span class="string">".ScannerActivity"</span></span></span><br><span class="line"><span class="tag"><span class="attr">android:label</span>=<span class="string">"@string/app_name"</span> </span></span><br><span class="line"><span class="tag"><span class="attr">android:exported</span>=<span class="string">"false"</span>/&gt;</span> <span class="comment">&lt;!-- 设置了exported属性值为false --&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- 如果Activity里面至少有一个filter的话，意味着这个Activity可以被其它应用从外部唤起，这个时候它的默认值是true --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">activity</span></span></span><br><span class="line"><span class="tag"><span class="attr">android:name</span>=<span class="string">".SecondActivity"</span></span></span><br><span class="line"><span class="tag"><span class="attr">android:label</span>=<span class="string">"@string/app_name"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">intent-filter</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">intent-filter</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">activity</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>然后我们<code>Analyze APK</code>一下我们的TIM的apk，打开它的AndroidManifest.xml文件，然后搜索<code>ScannerActivity</code>，发现<code>ScannerActivity</code>里面的<code>exported</code>的值果然是false。</p>
+<p><img src="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/20127664.jpg" alt></p>
+<p>既然如此的话，那就看一下当Activity的<code>exported</code>属性值为false的时候，为什么不能调起这个Activity，而且还会报异常。<br>从<code>startActivity</code>的源码看起，既然我们一开始的问题是<code>Permission Denial</code>，那么我们查看的关键词就必须包含<code>permission</code>，这样看起源码来就方便许多。</p>
+<h3 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h3><h4 id="Activity类"><a href="#Activity类" class="headerlink" title="Activity类"></a>Activity类</h4><p>首先是Activity里面的<code>startActivity</code>，发现他是调用自己的另一个同名不同参数的方法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">startActivity</span><span class="params">(Intent intent)</span> </span>&#123;</span><br><span class="line">   <span class="keyword">this</span>.startActivity(intent, <span class="keyword">null</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>跳到<code>startActivity(Intent intent, @Nullable Bundle options)</code>方法后，因为<code>options</code>参数为null，所以是调用<code>startActivityForResult(@RequiresPermission Intent intent, int requestCode)</code>这个方法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">startActivity</span><span class="params">(Intent intent, @Nullable Bundle options)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (options != <span class="keyword">null</span>) &#123;</span><br><span class="line">        startActivityForResult(intent, -<span class="number">1</span>, options);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// Note we want to go through this call for compatibility with</span></span><br><span class="line">        <span class="comment">// applications that may have overridden the method.</span></span><br><span class="line">        startActivityForResult(intent, -<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>跳到<code>startActivityForResult</code>方法后，发现又是调用同名不同参数的方法<code>startActivityForResult(@RequiresPermission Intent intent, int requestCode, @Nullable Bundle options)</code>。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">startActivityForResult</span><span class="params">(@RequiresPermission Intent intent, <span class="keyword">int</span> requestCode)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// requestCode = -1</span></span><br><span class="line">    startActivityForResult(intent, requestCode, <span class="keyword">null</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>接着看<code>mParent == null</code>条件里面的代码，关键词<code>startActivity</code>，然后找到<code>execStartActivity()</code>，是<code>Instrumentation</code>类里面的方法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">startActivityForResult</span><span class="params">(@RequiresPermission Intent intent, <span class="keyword">int</span> requestCode,</span></span></span><br><span class="line"><span class="function"><span class="params">        @Nullable Bundle options)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (mParent == <span class="keyword">null</span>) &#123;</span><br><span class="line">        options = transferSpringboardActivityOptions(options);</span><br><span class="line">        Instrumentation.ActivityResult ar =</span><br><span class="line">            mInstrumentation.execStartActivity(</span><br><span class="line">                <span class="keyword">this</span>, mMainThread.getApplicationThread(), mToken, <span class="keyword">this</span>,</span><br><span class="line">                intent, requestCode, options);</span><br><span class="line">        <span class="keyword">if</span> (ar != <span class="keyword">null</span>) &#123;</span><br><span class="line">            mMainThread.sendActivityResult(</span><br><span class="line">                mToken, mEmbeddedID, requestCode, ar.getResultCode(),</span><br><span class="line">                ar.getResultData());</span><br><span class="line">        &#125;</span><br><span class="line">        ....</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        ....</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="Instrumentation类"><a href="#Instrumentation类" class="headerlink" title="Instrumentation类"></a>Instrumentation类</h4><p>跳转到<code>execStartActivity</code>方法里，同样关键词<code>startActivity</code>，可以看到是<code>ActivityManagerNative.getDefault().startActivity()</code>方法和<code>checkStartActivityResult()</code>方法，我们先来看<code>checkStartActivityResult()</code>方法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> ActivityResult <span class="title">execStartActivity</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">    Context who, IBinder contextThread, IBinder token, String target,</span></span></span><br><span class="line"><span class="function"><span class="params">    Intent intent, <span class="keyword">int</span> requestCode, Bundle options)</span> </span>&#123;</span><br><span class="line">    IApplicationThread whoThread = (IApplicationThread) contextThread;</span><br><span class="line">    ....</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        intent.migrateExtraStreamToClipData();</span><br><span class="line">        intent.prepareToLeaveProcess(who);</span><br><span class="line">        <span class="keyword">int</span> result = ActivityManagerNative.getDefault()</span><br><span class="line">            .startActivity(whoThread, who.getBasePackageName(), intent,</span><br><span class="line">                    intent.resolveTypeIfNeeded(who.getContentResolver()),</span><br><span class="line">                    token, target, requestCode, <span class="number">0</span>, <span class="keyword">null</span>, options);</span><br><span class="line">        checkStartActivityResult(result, intent);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (RemoteException e) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"Failure from system"</span>, e);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>点进去之后发现，这里面就是我们经常<code>startActivity</code>之后，在类没找到或者没有在AndroidManifest中注册等等之后会报出的异常的判断方法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">checkStartActivityResult</span><span class="params">(<span class="keyword">int</span> res, Object intent)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (res &gt;= ActivityManager.START_SUCCESS) &#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">switch</span> (res) &#123;</span><br><span class="line">        <span class="keyword">case</span> ActivityManager.START_INTENT_NOT_RESOLVED:</span><br><span class="line">        <span class="keyword">case</span> ActivityManager.START_CLASS_NOT_FOUND:</span><br><span class="line">            <span class="keyword">if</span> (intent <span class="keyword">instanceof</span> Intent &amp;&amp; ((Intent)intent).getComponent() != <span class="keyword">null</span>)</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> ActivityNotFoundException(</span><br><span class="line">                        <span class="string">"Unable to find explicit activity class "</span></span><br><span class="line">                        + ((Intent)intent).getComponent().toShortString()</span><br><span class="line">                        + <span class="string">"; have you declared this activity in your AndroidManifest.xml?"</span>);</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> ActivityNotFoundException(</span><br><span class="line">                    <span class="string">"No Activity found to handle "</span> + intent);</span><br><span class="line">        <span class="keyword">case</span> ActivityManager.START_PERMISSION_DENIED:</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> SecurityException(<span class="string">"Not allowed to start activity "</span></span><br><span class="line">                    + intent);</span><br><span class="line">        <span class="keyword">case</span> ActivityManager.START_FORWARD_AND_REQUEST_CONFLICT:</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> AndroidRuntimeException(</span><br><span class="line">                    <span class="string">"FORWARD_RESULT_FLAG used while also requesting a result"</span>);</span><br><span class="line">        <span class="keyword">case</span> ActivityManager.START_NOT_ACTIVITY:</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(</span><br><span class="line">                    <span class="string">"PendingIntent is not an activity"</span>);</span><br><span class="line">        <span class="keyword">case</span> ActivityManager.START_NOT_VOICE_COMPATIBLE:</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> SecurityException(</span><br><span class="line">                    <span class="string">"Starting under voice control not allowed for: "</span> + intent);</span><br><span class="line">        <span class="keyword">case</span> ActivityManager.START_VOICE_NOT_ACTIVE_SESSION:</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(</span><br><span class="line">                    <span class="string">"Session calling startVoiceActivity does not match active session"</span>);</span><br><span class="line">        <span class="keyword">case</span> ActivityManager.START_VOICE_HIDDEN_SESSION:</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(</span><br><span class="line">                    <span class="string">"Cannot start voice activity on a hidden session"</span>);</span><br><span class="line">        <span class="keyword">case</span> ActivityManager.START_CANCELED:</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> AndroidRuntimeException(<span class="string">"Activity could not be started for "</span></span><br><span class="line">                    + intent);</span><br><span class="line">        <span class="keyword">default</span>:</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> AndroidRuntimeException(<span class="string">"Unknown error code "</span></span><br><span class="line">                    + res + <span class="string">" when starting "</span> + intent);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="IActivityManager接口"><a href="#IActivityManager接口" class="headerlink" title="IActivityManager接口"></a>IActivityManager接口</h4><p>点击<code>startActivity()</code>之后，跳转到<code>IActivityManager</code>接口里面来了，这个接口就是管理Activity的，然后我们从<code>ActivityManagerNative.getDefault().startActivity()</code>看出调用者是在<code>ActivityManangerNative</code>类里面。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * System private API for talking with the activity manager service.  This</span></span><br><span class="line"><span class="comment"> * provides calls from the application back to the activity manager.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * &#123;<span class="doctag">@hide</span>&#125;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">IActivityManager</span> <span class="keyword">extends</span> <span class="title">IInterface</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">startActivity</span><span class="params">(IApplicationThread caller, String callingPackage, Intent intent,</span></span></span><br><span class="line"><span class="function"><span class="params">            String resolvedType, IBinder resultTo, String resultWho, <span class="keyword">int</span> requestCode, <span class="keyword">int</span> flags,</span></span></span><br><span class="line"><span class="function"><span class="params">            ProfilerInfo profilerInfo, Bundle options)</span> <span class="keyword">throws</span> RemoteException</span>;</span><br><span class="line">    ....</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="ActivityManagerNative类"><a href="#ActivityManagerNative类" class="headerlink" title="ActivityManagerNative类"></a>ActivityManagerNative类</h4><p>这时候到了<code>ActivityManagerNative</code>类里面，实现了<code>IActivityManager</code>接口，同时<code>ActivityManagerNative</code>还是一个抽象类，说明<code>ActivityManagerNative.getDefault().startActivity()</code>调用<code>startActivity</code>调用的对象是该类的子类。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">ActivityManagerNative</span> <span class="keyword">extends</span> <span class="title">Binder</span> <span class="keyword">implements</span> <span class="title">IActivityManager</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    ....</span><br><span class="line">    <span class="function"><span class="keyword">static</span> <span class="keyword">public</span> IActivityManager <span class="title">getDefault</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> gDefault.get();</span><br><span class="line">    &#125;</span><br><span class="line">    ....</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后我们通过<code>ctrl + shift + F</code>打开搜索，关键词是<code>extends ActivityManagerNative</code>,<code>scope</code>选择<code>custom</code>，然后Find。</p>
+<p><img src="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/65162495.jpg" alt></p>
+<p>然后就找到了<code>ActivityManagerService</code>类</p>
+<p><img src="https://jowan-blog.oss-cn-shenzhen.aliyuncs.com/25252611.jpg" alt></p>
+<h4 id="ActivityManagerService类"><a href="#ActivityManagerService类" class="headerlink" title="ActivityManagerService类"></a>ActivityManagerService类</h4><p><code>ActivityManagerService</code>类类是<code>final</code>类型，不能被继承，然后我们来看一下他的<code>startActivity</code>方法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">ActivityManagerService</span> <span class="keyword">extends</span> <span class="title">ActivityManagerNative</span></span></span><br><span class="line"><span class="class">        <span class="keyword">implements</span> <span class="title">Watchdog</span>.<span class="title">Monitor</span>, <span class="title">BatteryStatsImpl</span>.<span class="title">BatteryCallback</span> </span>&#123;</span><br><span class="line">    ....</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">startActivity</span><span class="params">(IApplicationThread caller, String callingPackage,</span></span></span><br><span class="line"><span class="function"><span class="params">            Intent intent, String resolvedType, IBinder resultTo, String resultWho, <span class="keyword">int</span> requestCode,</span></span></span><br><span class="line"><span class="function"><span class="params">            <span class="keyword">int</span> startFlags, ProfilerInfo profilerInfo, Bundle bOptions)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> startActivityAsUser(caller, callingPackage, intent, resolvedType, resultTo,</span><br><span class="line">                resultWho, requestCode, startFlags, profilerInfo, bOptions,</span><br><span class="line">                UserHandle.getCallingUserId());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>startActivity</code>方法是调用了<code>startActivityAsUser</code>方法，我们继续走下去，来到了<code>startActivityAsUser</code>方法后发现，是调用了<code>ActivityStarter</code>类里面的<code>startActivityMayWait</code>方法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">startActivityAsUser</span><span class="params">(IApplicationThread caller, String callingPackage,</span></span></span><br><span class="line"><span class="function"><span class="params">        Intent intent, String resolvedType, IBinder resultTo, String resultWho, <span class="keyword">int</span> requestCode,</span></span></span><br><span class="line"><span class="function"><span class="params">        <span class="keyword">int</span> startFlags, ProfilerInfo profilerInfo, Bundle bOptions, <span class="keyword">int</span> userId)</span> </span>&#123;</span><br><span class="line">    enforceNotIsolatedCaller(<span class="string">"startActivity"</span>);</span><br><span class="line">    userId = mUserController.handleIncomingUser(Binder.getCallingPid(), Binder.getCallingUid(),</span><br><span class="line">            userId, <span class="keyword">false</span>, ALLOW_FULL_ONLY, <span class="string">"startActivity"</span>, <span class="keyword">null</span>);</span><br><span class="line">    <span class="comment">// <span class="doctag">TODO:</span> Switch to user app stacks here.</span></span><br><span class="line">    <span class="keyword">return</span> mActivityStarter.startActivityMayWait(caller, -<span class="number">1</span>, callingPackage, intent,</span><br><span class="line">            resolvedType, <span class="keyword">null</span>, <span class="keyword">null</span>, resultTo, resultWho, requestCode, startFlags,</span><br><span class="line">            profilerInfo, <span class="keyword">null</span>, <span class="keyword">null</span>, bOptions, <span class="keyword">false</span>, userId, <span class="keyword">null</span>, <span class="keyword">null</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="ActivityStarter类"><a href="#ActivityStarter类" class="headerlink" title="ActivityStarter类"></a>ActivityStarter类</h4><p><code>startActivityMayWait</code>方法内容很多，挑重点看，关键词<code>startActivity</code>，同时看<code>permission</code>相关的有没有，然后我们找到了<code>startActivityLocked</code>方法。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">final</span> <span class="keyword">int</span> <span class="title">startActivityMayWait</span><span class="params">(IApplicationThread caller, <span class="keyword">int</span> callingUid,</span></span></span><br><span class="line"><span class="function"><span class="params">        String callingPackage, Intent intent, String resolvedType,</span></span></span><br><span class="line"><span class="function"><span class="params">        IVoiceInteractionSession voiceSession, IVoiceInteractor voiceInteractor,</span></span></span><br><span class="line"><span class="function"><span class="params">        IBinder resultTo, String resultWho, <span class="keyword">int</span> requestCode, <span class="keyword">int</span> startFlags,</span></span></span><br><span class="line"><span class="function"><span class="params">        ProfilerInfo profilerInfo, IActivityManager.WaitResult outResult, Configuration config,</span></span></span><br><span class="line"><span class="function"><span class="params">        Bundle bOptions, <span class="keyword">boolean</span> ignoreTargetSecurity, <span class="keyword">int</span> userId,</span></span></span><br><span class="line"><span class="function"><span class="params">        IActivityContainer iContainer, TaskRecord inTask)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        ....</span><br><span class="line">        ResolveInfo rInfo = mSupervisor.resolveIntent(intent, resolvedType, userId);</span><br><span class="line">        .... </span><br><span class="line">        ActivityInfo aInfo = mSupervisor.resolveActivity(intent, rInfo, startFlags, profilerInfo);</span><br><span class="line">        ....</span><br><span class="line"></span><br><span class="line">        <span class="keyword">final</span> ActivityRecord[] outRecord = <span class="keyword">new</span> ActivityRecord[<span class="number">1</span>];</span><br><span class="line">        <span class="keyword">int</span> res = startActivityLocked(caller, intent, ephemeralIntent, resolvedType,</span><br><span class="line">                aInfo, rInfo, voiceSession, voiceInteractor,</span><br><span class="line">                resultTo, resultWho, requestCode, callingPid,</span><br><span class="line">                callingUid, callingPackage, realCallingPid, realCallingUid, startFlags,</span><br><span class="line">                options, ignoreTargetSecurity, componentSpecified, outRecord, container,</span><br><span class="line">                inTask);</span><br><span class="line">        ....</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>继续，走到<code>startActivityLocked</code>方法里面，内容特别多，同样挑关键词<code>startActivity</code>和<code>permission</code>看，结果我们找到了<code>mSupervisor.checkStartAnyActivityPermission</code>方法和<code>startActivityUnchecked</code>方法，既然我们的目的是找跟<code>permission</code>相关的，那么我们就只看<code>checkStartAnyActivityPermission</code>方法内容吧。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">final</span> <span class="keyword">int</span> <span class="title">startActivityLocked</span><span class="params">(IApplicationThread caller, Intent intent, Intent ephemeralIntent,</span></span></span><br><span class="line"><span class="function"><span class="params">        String resolvedType, ActivityInfo aInfo, ResolveInfo rInfo,</span></span></span><br><span class="line"><span class="function"><span class="params">        IVoiceInteractionSession voiceSession, IVoiceInteractor voiceInteractor,</span></span></span><br><span class="line"><span class="function"><span class="params">        IBinder resultTo, String resultWho, <span class="keyword">int</span> requestCode, <span class="keyword">int</span> callingPid, <span class="keyword">int</span> callingUid,</span></span></span><br><span class="line"><span class="function"><span class="params">        String callingPackage, <span class="keyword">int</span> realCallingPid, <span class="keyword">int</span> realCallingUid, <span class="keyword">int</span> startFlags,</span></span></span><br><span class="line"><span class="function"><span class="params">        ActivityOptions options, <span class="keyword">boolean</span> ignoreTargetSecurity, <span class="keyword">boolean</span> componentSpecified,</span></span></span><br><span class="line"><span class="function"><span class="params">        ActivityRecord[] outActivity, ActivityStackSupervisor.ActivityContainer container,</span></span></span><br><span class="line"><span class="function"><span class="params">        TaskRecord inTask)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> err = ActivityManager.START_SUCCESS;</span><br><span class="line">    ....</span><br><span class="line">    <span class="keyword">final</span> <span class="keyword">int</span> userId = aInfo != <span class="keyword">null</span> ? UserHandle.getUserId(aInfo.applicationInfo.uid) : <span class="number">0</span>;</span><br><span class="line">    ....</span><br><span class="line">    <span class="keyword">boolean</span> abort = !mSupervisor.checkStartAnyActivityPermission(intent, aInfo, resultWho,</span><br><span class="line">            requestCode, callingPid, callingUid, callingPackage, ignoreTargetSecurity, callerApp,</span><br><span class="line">            resultRecord, resultStack, options);</span><br><span class="line">    abort |= !mService.mIntentFirewall.checkStartActivity(intent, callingUid,</span><br><span class="line">            callingPid, resolvedType, aInfo.applicationInfo);</span><br><span class="line">    ....</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        mService.mWindowManager.deferSurfaceLayout();</span><br><span class="line">        err = startActivityUnchecked(r, sourceRecord, voiceSession, voiceInteractor, startFlags,</span><br><span class="line">                <span class="keyword">true</span>, options, inTask);</span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">        mService.mWindowManager.continueSurfaceLayout();</span><br><span class="line">    &#125;</span><br><span class="line">    postStartActivityUncheckedProcessing(r, err, stack.mStackId, mSourceRecord, mTargetStack);</span><br><span class="line">    <span class="keyword">return</span> err;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="ActivityStackSupervisor类"><a href="#ActivityStackSupervisor类" class="headerlink" title="ActivityStackSupervisor类"></a>ActivityStackSupervisor类</h4><p>根据<code>mSupervisor.checkStartAnyActivityPermission</code>我们来到了<code>ActivityStackSupervisor</code>类的<code>checkStartAnyActivityPermission</code>方法，方法内容不长，直接往下看</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">boolean</span> <span class="title">checkStartAnyActivityPermission</span><span class="params">(Intent intent, ActivityInfo aInfo,</span></span></span><br><span class="line"><span class="function"><span class="params">        String resultWho, <span class="keyword">int</span> requestCode, <span class="keyword">int</span> callingPid, <span class="keyword">int</span> callingUid,</span></span></span><br><span class="line"><span class="function"><span class="params">        String callingPackage, <span class="keyword">boolean</span> ignoreTargetSecurity, ProcessRecord callerApp,</span></span></span><br><span class="line"><span class="function"><span class="params">        ActivityRecord resultRecord, ActivityStack resultStack, ActivityOptions options)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 判断权限</span></span><br><span class="line">    <span class="keyword">final</span> <span class="keyword">int</span> startAnyPerm = mService.checkPermission(START_ANY_ACTIVITY, callingPid,</span><br><span class="line">            callingUid);</span><br><span class="line">    <span class="comment">// 如果startAnyPerm的值为0，也就是PERMISSION_GRANTED的话，直接返回true</span></span><br><span class="line">    <span class="keyword">if</span> (startAnyPerm ==  PERMISSION_GRANTED) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">final</span> <span class="keyword">int</span> componentRestriction = getComponentRestrictionForCallingPackage(</span><br><span class="line">            aInfo, callingPackage, callingPid, callingUid, ignoreTargetSecurity);</span><br><span class="line">    <span class="keyword">final</span> <span class="keyword">int</span> actionRestriction = getActionRestrictionForCallingPackage(</span><br><span class="line">            intent.getAction(), callingPackage, callingPid, callingUid);</span><br><span class="line">    <span class="keyword">if</span> (componentRestriction == ACTIVITY_RESTRICTION_PERMISSION</span><br><span class="line">            || actionRestriction == ACTIVITY_RESTRICTION_PERMISSION) &#123;</span><br><span class="line">        <span class="keyword">if</span> (resultRecord != <span class="keyword">null</span>) &#123;</span><br><span class="line">            resultStack.sendActivityResultLocked(-<span class="number">1</span>,</span><br><span class="line">                    resultRecord, resultWho, requestCode,</span><br><span class="line">                    Activity.RESULT_CANCELED, <span class="keyword">null</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">final</span> String msg;</span><br><span class="line">        <span class="comment">// 重点就是这里了</span></span><br><span class="line">        <span class="keyword">if</span> (actionRestriction == ACTIVITY_RESTRICTION_PERMISSION) &#123;</span><br><span class="line">            msg = <span class="string">"Permission Denial: starting "</span> + intent.toString()</span><br><span class="line">                    + <span class="string">" from "</span> + callerApp + <span class="string">" (pid="</span> + callingPid</span><br><span class="line">                    + <span class="string">", uid="</span> + callingUid + <span class="string">")"</span> + <span class="string">" with revoked permission "</span></span><br><span class="line">                    + ACTION_TO_RUNTIME_PERMISSION.get(intent.getAction());</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (!aInfo.exported) &#123;</span><br><span class="line">            msg = <span class="string">"Permission Denial: starting "</span> + intent.toString()</span><br><span class="line">                    + <span class="string">" from "</span> + callerApp + <span class="string">" (pid="</span> + callingPid</span><br><span class="line">                    + <span class="string">", uid="</span> + callingUid + <span class="string">")"</span></span><br><span class="line">                    + <span class="string">" not exported from uid "</span> + aInfo.applicationInfo.uid;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            msg = <span class="string">"Permission Denial: starting "</span> + intent.toString()</span><br><span class="line">                    + <span class="string">" from "</span> + callerApp + <span class="string">" (pid="</span> + callingPid</span><br><span class="line">                    + <span class="string">", uid="</span> + callingUid + <span class="string">")"</span></span><br><span class="line">                    + <span class="string">" requires "</span> + aInfo.permission;</span><br><span class="line">        &#125;</span><br><span class="line">        Slog.w(TAG, msg);</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> SecurityException(msg);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (actionRestriction == ACTIVITY_RESTRICTION_APPOP) &#123;</span><br><span class="line">        <span class="keyword">final</span> String message = <span class="string">"Appop Denial: starting "</span> + intent.toString()</span><br><span class="line">                + <span class="string">" from "</span> + callerApp + <span class="string">" (pid="</span> + callingPid</span><br><span class="line">                + <span class="string">", uid="</span> + callingUid + <span class="string">")"</span></span><br><span class="line">                + <span class="string">" requires "</span> + AppOpsManager.permissionToOp(</span><br><span class="line">                        ACTION_TO_RUNTIME_PERMISSION.get(intent.getAction()));</span><br><span class="line">        Slog.w(TAG, message);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (componentRestriction == ACTIVITY_RESTRICTION_APPOP) &#123;</span><br><span class="line">        <span class="keyword">final</span> String message = <span class="string">"Appop Denial: starting "</span> + intent.toString()</span><br><span class="line">                + <span class="string">" from "</span> + callerApp + <span class="string">" (pid="</span> + callingPid</span><br><span class="line">                + <span class="string">", uid="</span> + callingUid + <span class="string">")"</span></span><br><span class="line">                + <span class="string">" requires appop "</span> + AppOpsManager.permissionToOp(aInfo.permission);</span><br><span class="line">        Slog.w(TAG, message);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (options != <span class="keyword">null</span> &amp;&amp; options.getLaunchTaskId() != -<span class="number">1</span>) &#123;</span><br><span class="line">        <span class="keyword">final</span> <span class="keyword">int</span> startInTaskPerm = mService.checkPermission(START_TASKS_FROM_RECENTS,</span><br><span class="line">                callingPid, callingUid);</span><br><span class="line">        <span class="keyword">if</span> (startInTaskPerm != PERMISSION_GRANTED) &#123;</span><br><span class="line">            <span class="keyword">final</span> String msg = <span class="string">"Permission Denial: starting "</span> + intent.toString()</span><br><span class="line">                    + <span class="string">" from "</span> + callerApp + <span class="string">" (pid="</span> + callingPid</span><br><span class="line">                    + <span class="string">", uid="</span> + callingUid + <span class="string">") with launchTaskId="</span></span><br><span class="line">                    + options.getLaunchTaskId();</span><br><span class="line">            Slog.w(TAG, msg);</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> SecurityException(msg);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>找了那么久，终于找到了，开头提出的问题，就是下面这段代码里面的<code>!aInfo.exported</code>出现的。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (actionRestriction == ACTIVITY_RESTRICTION_PERMISSION) &#123;</span><br><span class="line">    msg = <span class="string">"Permission Denial: starting "</span> + intent.toString()</span><br><span class="line">    + <span class="string">" from "</span> + callerApp + <span class="string">" (pid="</span> + callingPid</span><br><span class="line">    + <span class="string">", uid="</span> + callingUid + <span class="string">")"</span> + <span class="string">" with revoked permission "</span></span><br><span class="line">    + ACTION_TO_RUNTIME_PERMISSION.get(intent.getAction());</span><br><span class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span> (!aInfo.exported) &#123;</span><br><span class="line">    msg = <span class="string">"Permission Denial: starting "</span> + intent.toString()</span><br><span class="line">    + <span class="string">" from "</span> + callerApp + <span class="string">" (pid="</span> + callingPid</span><br><span class="line">    + <span class="string">", uid="</span> + callingUid + <span class="string">")"</span></span><br><span class="line">    + <span class="string">" not exported from uid "</span> + aInfo.applicationInfo.uid;</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    msg = <span class="string">"Permission Denial: starting "</span> + intent.toString()</span><br><span class="line">    + <span class="string">" from "</span> + callerApp + <span class="string">" (pid="</span> + callingPid</span><br><span class="line">    + <span class="string">", uid="</span> + callingUid + <span class="string">")"</span></span><br><span class="line">    + <span class="string">" requires "</span> + aInfo.permission;</span><br><span class="line">&#125;</span><br><span class="line">Slog.w(TAG, msg);</span><br><span class="line"><span class="keyword">throw</span> <span class="keyword">new</span> SecurityException(msg);</span><br></pre></td></tr></table></figure></p>
+<p><code>aInfo</code>的类型是<code>ActivityInfo</code>，里面有个<code>exported</code>的属性，就是我们在AndroidManifest.xml里面设置的值。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Information you can retrieve about a particular application</span></span><br><span class="line"><span class="comment"> * activity or receiver. This corresponds to information collected</span></span><br><span class="line"><span class="comment"> * from the AndroidManifest.xml's &amp;lt;activity&amp;gt; and</span></span><br><span class="line"><span class="comment"> * &amp;lt;receiver&amp;gt; tags.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ActivityInfo</span> <span class="keyword">extends</span> <span class="title">ComponentInfo</span></span></span><br><span class="line"><span class="class">        <span class="keyword">implements</span> <span class="title">Parcelable</span> </span>&#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>翻了那么多的源码，看到这里我们的疑惑就解除了，这里报异常是还没进行到调起要跳转的Activity的时候就已经报<code>SecurityException</code>异常了，也就是在<code>checkStartAnyActivityPermission</code>方法里面报异常，没有再往下面走<code>startActivityUnchecked</code>这里面启动Activity的代码。</p>
+<p>所以，在<code>exported</code>属性为false的时候，别人是调用不了这个Activity的，那么我的一开始的想法是实现不了的，那就只能通过命令行来调起Activity了，当然这操作是需要root的。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    Jowan
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://www.jowanxu.top/2017/09/28/探究Exported属性对startActivity的影响/" title="探究Exported属性对startActivity的影响">https://www.jowanxu.top/2017/09/28/探究Exported属性对startActivity的影响/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android/" rel="tag"><i class="fa fa-tag"></i> Android</a>
+          
+            <a href="/tags/Activity/" rel="tag"><i class="fa fa-tag"></i> Activity</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/09/21/Xposed开发初体验/" rel="next" title="Xposed开发初体验">
+                <i class="fa fa-chevron-left"></i> Xposed开发初体验
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/09/29/使用Xposed去除微博国际版的启动广告/" rel="prev" title="使用Xposed去除微博国际版的启动广告">
+                使用Xposed去除微博国际版的启动广告 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zMjA1My84NjE3"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="Jowan">
+          <p class="site-author-name" itemprop="name">Jowan</p>
+           
+              <p class="site-description motion-element" itemprop="description">叫我旺仔<br>Android Developer</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">49</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">70</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://plus.google.com/u/0/111824269044709365866" target="_blank" title="Google">
+                  
+                    <i class="fa fa-fw fa-google"></i>
+                  
+                    
+                      Google
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/wangzailfm" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/809077554" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                    
+                      Weibo
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="673173629@qq.com" target="_blank" title="E-Mail">
+                  
+                    <i class="fa fa-fw fa-envelope"></i>
+                  
+                    
+                      E-Mail
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/u011976726" target="_blank" title="CSDN">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      CSDN
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.jianshu.com/u/5509a21c1623" target="_blank" title="Jianshu">
+                  
+                    <i class="fa fa-fw fa-book"></i>
+                  
+                    
+                      Jianshu
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-block">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              Links
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://wanandroid.com/" title="玩Android" target="_blank">玩Android</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://blog.csdn.net/lmj623565791?viewmode=contents" title="HongYang" target="_blank">HongYang</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="https://lgzh1215.github.io/" title="萌雀" target="_blank">萌雀</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://ice1000.org/" title="冰封" target="_blank">冰封</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#缘由"><span class="nav-number">1.</span> <span class="nav-text">缘由</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Exported属性"><span class="nav-number">2.</span> <span class="nav-text">Exported属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#源码"><span class="nav-number">3.</span> <span class="nav-text">源码</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Activity类"><span class="nav-number">3.1.</span> <span class="nav-text">Activity类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Instrumentation类"><span class="nav-number">3.2.</span> <span class="nav-text">Instrumentation类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#IActivityManager接口"><span class="nav-number">3.3.</span> <span class="nav-text">IActivityManager接口</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ActivityManagerNative类"><span class="nav-number">3.4.</span> <span class="nav-text">ActivityManagerNative类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ActivityManagerService类"><span class="nav-number">3.5.</span> <span class="nav-text">ActivityManagerService类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ActivityStarter类"><span class="nav-number">3.6.</span> <span class="nav-text">ActivityStarter类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ActivityStackSupervisor类"><span class="nav-number">3.7.</span> <span class="nav-text">ActivityStackSupervisor类</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy;  2017 - 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jowan</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

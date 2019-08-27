@@ -1,0 +1,1268 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+  <meta name="google-site-verification" content="vjImUBDCK8Rg9G13vkIip_GUsZTtVV6s-XdSk81-jzA">
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="Kotlin,Activity,Intent,Extension,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="旺仔的个人博客" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.png?v=5.1.2">
+
+
+
+
+
+
+<meta name="keywords" content="Kotlin,Activity,Intent,Extension">
+<meta property="og:type" content="article">
+<meta property="og:title" content="记一次写Intent的扩展">
+<meta property="og:url" content="https://www.jowanxu.top/2019/02/11/Android-Intent-Extension/index.html">
+<meta property="og:site_name" content="旺仔的个人博客">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-08-27T12:18:42.381Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="记一次写Intent的扩展">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://www.jowanxu.top/2019/02/11/Android-Intent-Extension/">
+
+
+
+
+
+  <title>记一次写Intent的扩展 | 旺仔的个人博客</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">旺仔的个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">叫我旺仔<br>Android Developer</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br>
+            
+            公益
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://www.jowanxu.top/2019/02/11/Android-Intent-Extension/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Jowan">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="旺仔的个人博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">记一次写Intent的扩展</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-02-11T21:05:19+08:00">
+                2019-02-11
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2019-08-27T20:18:42+08:00">
+                2019-08-27
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <br>
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">文章字数</span>
+                
+                <span title="文章字数">
+                   字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长需</span>
+                
+                <span title="阅读时长需">
+                   分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <hr>
+<a id="more"></a>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>写项目的时候经常会写到跳转Activiey，写到跳转Activit就一定会写到putExtra，就像下面那样<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">intent.putExtra(<span class="string">"a"</span>, item.a)</span><br><span class="line">intent.putExtra(<span class="string">"b"</span>, item.b)</span><br><span class="line">intent.putExtra(<span class="string">"c"</span>, item.c)</span><br></pre></td></tr></table></figure></p>
+<p>挺多哈，每次都要重复前面相同的内容，所以就想着能不能写个扩展来简写。</p>
+<h2 id="开始"><a href="#开始" class="headerlink" title="开始"></a>开始</h2><p>我们最终实现是这样的：<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Intent(context, TestActivity::<span class="class"><span class="keyword">class</span>.<span class="title">java</span>)</span></span><br><span class="line">  .putExtraVararg(</span><br><span class="line">    <span class="string">"a"</span> to item.a, </span><br><span class="line">    <span class="string">"b"</span> to item.b, </span><br><span class="line">    <span class="string">"c"</span> to item.c</span><br><span class="line">  )</span><br></pre></td></tr></table></figure></p>
+<h3 id="仿mapOf"><a href="#仿mapOf" class="headerlink" title="仿mapOf"></a>仿mapOf</h3><p>经常用到<code>mapOf()</code>或者<code>mutableMapOf()</code>就会知道，里面是用了<code>Pair</code>类来生成Map的，所以受此启发，打算用<code>Pair</code>来作为参数实现，那么写的时候就应该是这样写，参数为可变参数类型：<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 作为Intent的扩展</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> Intent.<span class="title">putExtraVararg</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">    <span class="keyword">vararg</span> extras: <span class="type">Pair</span>&lt;<span class="type">String</span>, Any?&gt;</span></span></span><br><span class="line"><span class="function"><span class="params">)</span></span>: Intent &#123;</span><br><span class="line">    <span class="comment">// 先省略</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><code>putExtra</code>的第一个参数类型肯定是<code>String</code>类型，第二个参数的类型包括<code>Bundle, Boolean, BooleanArray, Byte, ByteArray, Char, CharArray, String</code>等等，所以就用<code>Any</code>类型，因为是可空的，所以加上<code>?</code>。</p>
+<p>那么调用的时候，就是这样子的<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Intent(context, TestActivity::<span class="class"><span class="keyword">class</span>.<span class="title">java</span>)</span></span><br><span class="line">    .putExtraVararg(</span><br><span class="line">        <span class="string">"a"</span> to item.a, </span><br><span class="line">        <span class="string">"b"</span> to item.b, </span><br><span class="line">        <span class="string">"c"</span> to item.c</span><br><span class="line">    )</span><br></pre></td></tr></table></figure></p>
+<p>是不是就是一开始说的那样，对比平常写的是不是简单了很多。</p>
+<h3 id="参数类型匹配"><a href="#参数类型匹配" class="headerlink" title="参数类型匹配"></a>参数类型匹配</h3><p>写好了参数，那么就要进行对参数类型的匹配进行对应的<code>putExtra</code>。</p>
+<p><code>vararg</code>参数可以用<code>forEach</code>来循环对每个参数类型进行匹配：<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> Intent.<span class="title">putExtraVararg</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">    <span class="keyword">vararg</span> extras: <span class="type">Pair</span>&lt;<span class="type">String</span>, Any?&gt;</span></span></span><br><span class="line"><span class="function"><span class="params">)</span></span>: Intent &#123;</span><br><span class="line">    <span class="keyword">if</span> (extras.isEmpty()) <span class="keyword">return</span> <span class="keyword">this</span></span><br><span class="line">    extras.forEach &#123; (key, value) -&gt;</span><br><span class="line">        value ?: let &#123;</span><br><span class="line">            it.putExtra(key, it.toString())</span><br><span class="line">            <span class="keyword">return</span><span class="symbol">@forEach</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">when</span> (value) &#123;</span><br><span class="line">            <span class="keyword">is</span> Bundle -&gt; <span class="keyword">this</span>.putExtra(key, value)</span><br><span class="line">            <span class="keyword">is</span> <span class="built_in">Boolean</span> -&gt; <span class="keyword">this</span>.putExtra(key, value)</span><br><span class="line">            <span class="keyword">is</span> BooleanArray -&gt; <span class="keyword">this</span>.putExtra(key, value)</span><br><span class="line">            <span class="keyword">is</span> <span class="built_in">Byte</span> -&gt; <span class="keyword">this</span>.putExtra(key, value)</span><br><span class="line">            <span class="keyword">is</span> ByteArray -&gt; <span class="keyword">this</span>.putExtra(key, value)</span><br><span class="line">            <span class="keyword">is</span> <span class="built_in">Char</span> -&gt; <span class="keyword">this</span>.putExtra(key, value)</span><br><span class="line">            <span class="keyword">is</span> CharArray -&gt; <span class="keyword">this</span>.putExtra(key, value)</span><br><span class="line">            <span class="keyword">is</span> String -&gt; <span class="keyword">this</span>.putExtra(key, value)</span><br><span class="line">            <span class="keyword">is</span> CharSequence -&gt; <span class="keyword">this</span>.putExtra(key, value)</span><br><span class="line">            <span class="keyword">is</span> <span class="built_in">Double</span> -&gt; <span class="keyword">this</span>.putExtra(key, value)</span><br><span class="line">            <span class="keyword">is</span> DoubleArray -&gt; <span class="keyword">this</span>.putExtra(key, value)</span><br><span class="line">            <span class="keyword">is</span> <span class="built_in">Float</span> -&gt; <span class="keyword">this</span>.putExtra(key, value)</span><br><span class="line">            <span class="keyword">is</span> FloatArray -&gt; <span class="keyword">this</span>.putExtra(key, value)</span><br><span class="line">            <span class="keyword">is</span> <span class="built_in">Int</span> -&gt; <span class="keyword">this</span>.putExtra(key, value)</span><br><span class="line">            <span class="keyword">is</span> IntArray -&gt; <span class="keyword">this</span>.putExtra(key, value)</span><br><span class="line">            <span class="keyword">is</span> <span class="built_in">Long</span> -&gt; <span class="keyword">this</span>.putExtra(key, value)</span><br><span class="line">            <span class="keyword">is</span> LongArray -&gt; <span class="keyword">this</span>.putExtra(key, value)</span><br><span class="line">            <span class="keyword">is</span> <span class="built_in">Short</span> -&gt; <span class="keyword">this</span>.putExtra(key, value)</span><br><span class="line">            <span class="keyword">is</span> ShortArray -&gt; <span class="keyword">this</span>.putExtra(key, value)</span><br><span class="line">            <span class="keyword">is</span> Parcelable -&gt; <span class="keyword">this</span>.putExtra(key, value)</span><br><span class="line">            <span class="keyword">is</span> Serializable -&gt; <span class="keyword">this</span>.putExtra(key, value)</span><br><span class="line">            <span class="keyword">else</span> -&gt; &#123;</span><br><span class="line">                <span class="keyword">throw</span> IllegalArgumentException(<span class="string">"Not support <span class="variable">$value</span> type <span class="subst">$&#123;value.javaClass&#125;</span>.."</span>)</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>发现没有，还少了<code>ArrayList&lt;String&gt;</code>、<code>ArrayList&lt;CharSequence&gt;</code>、<code>ArrayList&lt;? extends Parcelable&gt;</code>这三个List的参数类型匹配，因为不能直接<code>is</code>来匹配对应的Array类型，在群里问过之后，才得出最终的方法，Array里面有一个匹配对应类型的扩展函数<code>isArrayOf()</code>：<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Checks if array can contain element of type [T].</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Suppress(<span class="meta-string">"REIFIED_TYPE_PARAMETER_NO_INLINE"</span>)</span></span><br><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">fun</span> <span class="type">&lt;<span class="keyword">reified</span> T : Any&gt;</span> Array<span class="type">&lt;*&gt;</span>.<span class="title">isArrayOf</span><span class="params">()</span></span>: <span class="built_in">Boolean</span> =</span><br><span class="line">    T::<span class="class"><span class="keyword">class</span>.<span class="title">java</span>.<span class="title">isAssignableFrom</span></span>(<span class="keyword">this</span>::<span class="class"><span class="keyword">class</span>.<span class="title">java</span>.<span class="title">componentType</span>)</span></span><br></pre></td></tr></table></figure></p>
+<p>so，这样就简单了，我们先匹配<code>Array</code>，然后在匹配对应的<code>ArrayList&lt;String&gt;</code>、<code>ArrayList&lt;CharSequence&gt;</code>、<code>ArrayList&lt;? extends Parcelable&gt;</code>，最后在对应put方法那里用<code>as</code>：<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">is</span> Array&lt;*&gt; -&gt; &#123;</span><br><span class="line">    <span class="meta">@Suppress(<span class="meta-string">"UNCHECKED_CAST"</span>)</span></span><br><span class="line">    <span class="keyword">when</span> &#123;</span><br><span class="line">        value.isArrayOf&lt;String&gt;() -&gt; &#123;</span><br><span class="line">            <span class="keyword">this</span>.putStringArrayListExtra(key, value <span class="keyword">as</span> ArrayList&lt;String?&gt;)</span><br><span class="line">        &#125;</span><br><span class="line">        value.isArrayOf&lt;CharSequence&gt;() -&gt; &#123;</span><br><span class="line">            <span class="keyword">this</span>.putCharSequenceArrayListExtra(key, value <span class="keyword">as</span> ArrayList&lt;CharSequence?&gt;)</span><br><span class="line">        &#125;</span><br><span class="line">        value.isArrayOf&lt;Parcelable&gt;() -&gt; &#123;</span><br><span class="line">            <span class="keyword">this</span>.putParcelableArrayListExtra(key, value <span class="keyword">as</span> ArrayList&lt;<span class="keyword">out</span> Parcelable?&gt;)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这样就实现了不同<code>Array</code>类型的<code>putExtra</code>。</p>
+<h2 id="最终"><a href="#最终" class="headerlink" title="最终"></a>最终</h2><p>最后完整的代码为<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> Intent.<span class="title">putExtraVararg</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">    <span class="keyword">vararg</span> extras: <span class="type">Pair</span>&lt;<span class="type">String</span>, Any?&gt;</span></span></span><br><span class="line"><span class="function"><span class="params">)</span></span>: Intent &#123;</span><br><span class="line">    <span class="keyword">if</span> (extras.isEmpty()) <span class="keyword">return</span> <span class="keyword">this</span></span><br><span class="line">    extras.forEach &#123;</span><br><span class="line">        <span class="keyword">val</span> key = it.first</span><br><span class="line">        <span class="keyword">val</span> value = it.second ?: let &#123;</span><br><span class="line">            it.putExtra(key, it.toString())</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    extras.forEach &#123; (key, value) -&gt;</span><br><span class="line">        value ?: let &#123;</span><br><span class="line">            it.putExtra(key, it.toString())</span><br><span class="line">            <span class="keyword">return</span><span class="symbol">@forEach</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">when</span> (value) &#123;</span><br><span class="line">            <span class="keyword">is</span> Bundle -&gt; <span class="keyword">this</span>.putExtra(key, value)</span><br><span class="line">            <span class="keyword">is</span> <span class="built_in">Boolean</span> -&gt; <span class="keyword">this</span>.putExtra(key, value)</span><br><span class="line">            <span class="keyword">is</span> BooleanArray -&gt; <span class="keyword">this</span>.putExtra(key, value)</span><br><span class="line">            <span class="keyword">is</span> <span class="built_in">Byte</span> -&gt; <span class="keyword">this</span>.putExtra(key, value)</span><br><span class="line">            <span class="keyword">is</span> ByteArray -&gt; <span class="keyword">this</span>.putExtra(key, value)</span><br><span class="line">            <span class="keyword">is</span> <span class="built_in">Char</span> -&gt; <span class="keyword">this</span>.putExtra(key, value)</span><br><span class="line">            <span class="keyword">is</span> CharArray -&gt; <span class="keyword">this</span>.putExtra(key, value)</span><br><span class="line">            <span class="keyword">is</span> String -&gt; <span class="keyword">this</span>.putExtra(key, value)</span><br><span class="line">            <span class="keyword">is</span> CharSequence -&gt; <span class="keyword">this</span>.putExtra(key, value)</span><br><span class="line">            <span class="keyword">is</span> <span class="built_in">Double</span> -&gt; <span class="keyword">this</span>.putExtra(key, value)</span><br><span class="line">            <span class="keyword">is</span> DoubleArray -&gt; <span class="keyword">this</span>.putExtra(key, value)</span><br><span class="line">            <span class="keyword">is</span> <span class="built_in">Float</span> -&gt; <span class="keyword">this</span>.putExtra(key, value)</span><br><span class="line">            <span class="keyword">is</span> FloatArray -&gt; <span class="keyword">this</span>.putExtra(key, value)</span><br><span class="line">            <span class="keyword">is</span> <span class="built_in">Int</span> -&gt; <span class="keyword">this</span>.putExtra(key, value)</span><br><span class="line">            <span class="keyword">is</span> IntArray -&gt; <span class="keyword">this</span>.putExtra(key, value)</span><br><span class="line">            <span class="keyword">is</span> <span class="built_in">Long</span> -&gt; <span class="keyword">this</span>.putExtra(key, value)</span><br><span class="line">            <span class="keyword">is</span> LongArray -&gt; <span class="keyword">this</span>.putExtra(key, value)</span><br><span class="line">            <span class="keyword">is</span> <span class="built_in">Short</span> -&gt; <span class="keyword">this</span>.putExtra(key, value)</span><br><span class="line">            <span class="keyword">is</span> ShortArray -&gt; <span class="keyword">this</span>.putExtra(key, value)</span><br><span class="line">            <span class="keyword">is</span> Array&lt;*&gt; -&gt; &#123;</span><br><span class="line">                <span class="meta">@Suppress(<span class="meta-string">"UNCHECKED_CAST"</span>)</span></span><br><span class="line">                <span class="keyword">when</span> &#123;</span><br><span class="line">                    value.isArrayOf&lt;String&gt;() -&gt; &#123;</span><br><span class="line">                        <span class="keyword">this</span>.putStringArrayListExtra(key, value <span class="keyword">as</span> ArrayList&lt;String?&gt;)</span><br><span class="line">                    &#125;</span><br><span class="line">                    value.isArrayOf&lt;CharSequence&gt;() -&gt; &#123;</span><br><span class="line">                        <span class="keyword">this</span>.putCharSequenceArrayListExtra(key, value <span class="keyword">as</span> ArrayList&lt;CharSequence?&gt;)</span><br><span class="line">                    &#125;</span><br><span class="line">                    value.isArrayOf&lt;Parcelable&gt;() -&gt; &#123;</span><br><span class="line">                        <span class="keyword">this</span>.putParcelableArrayListExtra(key, value <span class="keyword">as</span> ArrayList&lt;<span class="keyword">out</span> Parcelable?&gt;)</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">is</span> Parcelable -&gt; <span class="keyword">this</span>.putExtra(key, value)</span><br><span class="line">            <span class="keyword">is</span> Serializable -&gt; <span class="keyword">this</span>.putExtra(key, value)</span><br><span class="line">            <span class="keyword">else</span> -&gt; &#123;</span><br><span class="line">                <span class="keyword">throw</span> IllegalArgumentException(<span class="string">"Not support <span class="variable">$value</span> type <span class="subst">$&#123;value.javaClass&#125;</span>.."</span>)</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>转成Java是这样的：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">IntentExtKt</span> </span>&#123;</span><br><span class="line">   <span class="meta">@NotNull</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Intent <span class="title">putExtraVararg</span><span class="params">(@NotNull Intent $receiver, @NotNull Pair... extras)</span> </span>&#123;</span><br><span class="line">      Intrinsics.checkParameterIsNotNull($receiver, <span class="string">"receiver$0"</span>);</span><br><span class="line">      Intrinsics.checkParameterIsNotNull(extras, <span class="string">"extras"</span>);</span><br><span class="line">      <span class="keyword">if</span> (extras.length == <span class="number">0</span>) &#123;</span><br><span class="line">         <span class="keyword">return</span> $receiver;</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">         Pair[] var3 = extras;</span><br><span class="line">         <span class="keyword">int</span> var4 = extras.length;</span><br><span class="line"></span><br><span class="line">         <span class="keyword">int</span> var5;</span><br><span class="line">         Pair element$iv;</span><br><span class="line">         <span class="keyword">boolean</span> var8;</span><br><span class="line">         String key;</span><br><span class="line">         <span class="keyword">for</span>(var5 = <span class="number">0</span>; var5 &lt; var4; ++var5) &#123;</span><br><span class="line">            element$iv = var3[var5];</span><br><span class="line">            var8 = <span class="keyword">false</span>;</span><br><span class="line">            key = (String)element$iv.getFirst();</span><br><span class="line">            <span class="keyword">if</span> (element$iv.getSecond() == <span class="keyword">null</span>) &#123;</span><br><span class="line">               <span class="keyword">int</span> var12 = <span class="keyword">false</span>;</span><br><span class="line">               $receiver.putExtra(key, $receiver.toString());</span><br><span class="line">            &#125;</span><br><span class="line">         &#125;</span><br><span class="line"></span><br><span class="line">         var3 = extras;</span><br><span class="line">         var4 = extras.length;</span><br><span class="line"></span><br><span class="line">         <span class="keyword">for</span>(var5 = <span class="number">0</span>; var5 &lt; var4; ++var5) &#123;</span><br><span class="line">            element$iv = var3[var5];</span><br><span class="line">            var8 = <span class="keyword">false</span>;</span><br><span class="line">            key = (String)element$iv.component1();</span><br><span class="line">            Object value = element$iv.component2();</span><br><span class="line">            <span class="keyword">if</span> (value != <span class="keyword">null</span>) &#123;</span><br><span class="line">               <span class="keyword">if</span> (value <span class="keyword">instanceof</span> Bundle) &#123;</span><br><span class="line">                  $receiver.putExtra(key, (Bundle)value);</span><br><span class="line">               &#125; <span class="keyword">else</span> <span class="keyword">if</span> (value <span class="keyword">instanceof</span> Boolean) &#123;</span><br><span class="line">                  $receiver.putExtra(key, (Boolean)value);</span><br><span class="line">               &#125; <span class="keyword">else</span> <span class="keyword">if</span> (value <span class="keyword">instanceof</span> <span class="keyword">boolean</span>[]) &#123;</span><br><span class="line">                  $receiver.putExtra(key, (<span class="keyword">boolean</span>[])value);</span><br><span class="line">               &#125; <span class="keyword">else</span> <span class="keyword">if</span> (value <span class="keyword">instanceof</span> Byte) &#123;</span><br><span class="line">                  $receiver.putExtra(key, ((Number)value).byteValue());</span><br><span class="line">               &#125; <span class="keyword">else</span> <span class="keyword">if</span> (value <span class="keyword">instanceof</span> <span class="keyword">byte</span>[]) &#123;</span><br><span class="line">                  $receiver.putExtra(key, (<span class="keyword">byte</span>[])value);</span><br><span class="line">               &#125; <span class="keyword">else</span> <span class="keyword">if</span> (value <span class="keyword">instanceof</span> Character) &#123;</span><br><span class="line">                  $receiver.putExtra(key, (Character)value);</span><br><span class="line">               &#125; <span class="keyword">else</span> <span class="keyword">if</span> (value <span class="keyword">instanceof</span> <span class="keyword">char</span>[]) &#123;</span><br><span class="line">                  $receiver.putExtra(key, (<span class="keyword">char</span>[])value);</span><br><span class="line">               &#125; <span class="keyword">else</span> <span class="keyword">if</span> (value <span class="keyword">instanceof</span> String) &#123;</span><br><span class="line">                  $receiver.putExtra(key, (String)value);</span><br><span class="line">               &#125; <span class="keyword">else</span> <span class="keyword">if</span> (value <span class="keyword">instanceof</span> CharSequence) &#123;</span><br><span class="line">                  $receiver.putExtra(key, (CharSequence)value);</span><br><span class="line">               &#125; <span class="keyword">else</span> <span class="keyword">if</span> (value <span class="keyword">instanceof</span> Double) &#123;</span><br><span class="line">                  $receiver.putExtra(key, ((Number)value).doubleValue());</span><br><span class="line">               &#125; <span class="keyword">else</span> <span class="keyword">if</span> (value <span class="keyword">instanceof</span> <span class="keyword">double</span>[]) &#123;</span><br><span class="line">                  $receiver.putExtra(key, (<span class="keyword">double</span>[])value);</span><br><span class="line">               &#125; <span class="keyword">else</span> <span class="keyword">if</span> (value <span class="keyword">instanceof</span> Float) &#123;</span><br><span class="line">                  $receiver.putExtra(key, ((Number)value).floatValue());</span><br><span class="line">               &#125; <span class="keyword">else</span> <span class="keyword">if</span> (value <span class="keyword">instanceof</span> <span class="keyword">float</span>[]) &#123;</span><br><span class="line">                  $receiver.putExtra(key, (<span class="keyword">float</span>[])value);</span><br><span class="line">               &#125; <span class="keyword">else</span> <span class="keyword">if</span> (value <span class="keyword">instanceof</span> Integer) &#123;</span><br><span class="line">                  $receiver.putExtra(key, ((Number)value).intValue());</span><br><span class="line">               &#125; <span class="keyword">else</span> <span class="keyword">if</span> (value <span class="keyword">instanceof</span> <span class="keyword">int</span>[]) &#123;</span><br><span class="line">                  $receiver.putExtra(key, (<span class="keyword">int</span>[])value);</span><br><span class="line">               &#125; <span class="keyword">else</span> <span class="keyword">if</span> (value <span class="keyword">instanceof</span> Long) &#123;</span><br><span class="line">                  $receiver.putExtra(key, ((Number)value).longValue());</span><br><span class="line">               &#125; <span class="keyword">else</span> <span class="keyword">if</span> (value <span class="keyword">instanceof</span> <span class="keyword">long</span>[]) &#123;</span><br><span class="line">                  $receiver.putExtra(key, (<span class="keyword">long</span>[])value);</span><br><span class="line">               &#125; <span class="keyword">else</span> <span class="keyword">if</span> (value <span class="keyword">instanceof</span> Short) &#123;</span><br><span class="line">                  $receiver.putExtra(key, ((Number)value).shortValue());</span><br><span class="line">               &#125; <span class="keyword">else</span> <span class="keyword">if</span> (value <span class="keyword">instanceof</span> <span class="keyword">short</span>[]) &#123;</span><br><span class="line">                  $receiver.putExtra(key, (<span class="keyword">short</span>[])value);</span><br><span class="line">               &#125; <span class="keyword">else</span> <span class="keyword">if</span> (value <span class="keyword">instanceof</span> Object[]) &#123;</span><br><span class="line">                  <span class="keyword">if</span> ((Object[])value <span class="keyword">instanceof</span> String[]) &#123;</span><br><span class="line">                     $receiver.putStringArrayListExtra(key, (ArrayList)value);</span><br><span class="line">                  &#125; <span class="keyword">else</span> <span class="keyword">if</span> ((Object[])value <span class="keyword">instanceof</span> CharSequence[]) &#123;</span><br><span class="line">                     $receiver.putCharSequenceArrayListExtra(key, (ArrayList)value);</span><br><span class="line">                  &#125; <span class="keyword">else</span> <span class="keyword">if</span> ((Object[])value <span class="keyword">instanceof</span> Parcelable[]) &#123;</span><br><span class="line">                     $receiver.putParcelableArrayListExtra(key, (ArrayList)value);</span><br><span class="line">                  &#125;</span><br><span class="line">               &#125; <span class="keyword">else</span> <span class="keyword">if</span> (value <span class="keyword">instanceof</span> Parcelable) &#123;</span><br><span class="line">                  $receiver.putExtra(key, (Parcelable)value);</span><br><span class="line">               &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                  <span class="keyword">if</span> (!(value <span class="keyword">instanceof</span> Serializable)) &#123;</span><br><span class="line">                     <span class="keyword">throw</span> (Throwable)(<span class="keyword">new</span> IllegalArgumentException(<span class="string">"Not support "</span> + value + <span class="string">" type "</span> + value.getClass() + <span class="string">".."</span>));</span><br><span class="line">                  &#125;</span><br><span class="line"></span><br><span class="line">                  $receiver.putExtra(key, (Serializable)value);</span><br><span class="line">               &#125;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">               <span class="keyword">int</span> var13 = <span class="keyword">false</span>;</span><br><span class="line">               $receiver.putExtra(key, $receiver.toString());</span><br><span class="line">            &#125;</span><br><span class="line">         &#125;</span><br><span class="line"></span><br><span class="line">         <span class="keyword">return</span> $receiver;</span><br><span class="line">      &#125;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="顺手写别的扩展"><a href="#顺手写别的扩展" class="headerlink" title="顺手写别的扩展"></a>顺手写别的扩展</h3><p>既然用到Intent的扩展，那么就顺手写下Activity的startActivity的扩展<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 同Context的startActivity</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> Context.<span class="title">toActivity</span><span class="params">(packageContext: <span class="type">Context</span>?, cls: <span class="type">Class</span>&lt;*&gt;, <span class="keyword">vararg</span> extras: <span class="type">Pair</span>&lt;<span class="type">String</span>, Any?&gt;)</span></span> &#123;</span><br><span class="line">    startActivity(Intent(packageContext, cls).putExtraVararg(*extras))</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 同Context的startActivity</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> Context.<span class="title">toActivity</span><span class="params">(intent: <span class="type">Intent</span>)</span></span> &#123;</span><br><span class="line">    startActivity(intent)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>调用的时候就是这样子的<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">context.toActivity(</span><br><span class="line">    context,</span><br><span class="line">    SearchActivity::<span class="class"><span class="keyword">class</span>.<span class="title">java</span>,<span class="type"></span></span></span><br><span class="line">    SearchActivity.SEARCH_TYPE to item.type,</span><br><span class="line">    SearchActivity.SEARCH_UID to item.uid,</span><br><span class="line">    SearchActivity.SEARCH_NAME to item.name,</span><br><span class="line">    SearchActivity.SEARCH_KEY to item.key,</span><br><span class="line">    SearchActivity.SEARCH_GROUP to item.group</span><br><span class="line">)</span><br></pre></td></tr></table></figure></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>通过这次的扩展，也学到了关于<code>Array</code>的一些扩展函数，可以说是很美好了。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    Jowan
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://www.jowanxu.top/2019/02/11/Android-Intent-Extension/" title="记一次写Intent的扩展">https://www.jowanxu.top/2019/02/11/Android-Intent-Extension/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Kotlin/" rel="tag"><i class="fa fa-tag"></i> Kotlin</a>
+          
+            <a href="/tags/Activity/" rel="tag"><i class="fa fa-tag"></i> Activity</a>
+          
+            <a href="/tags/Intent/" rel="tag"><i class="fa fa-tag"></i> Intent</a>
+          
+            <a href="/tags/Extension/" rel="tag"><i class="fa fa-tag"></i> Extension</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/06/10/Android-Constraint-1-1-Feture/" rel="next" title="ConstraintLayout 1.1版本的新特性">
+                <i class="fa fa-chevron-left"></i> ConstraintLayout 1.1版本的新特性
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/08/27/Kotlin_intent_get_extra/" rel="prev" title="使用Kotlin委托来简化获取Intent参数的方式">
+                使用Kotlin委托来简化获取Intent参数的方式 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zMjA1My84NjE3"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="Jowan">
+          <p class="site-author-name" itemprop="name">Jowan</p>
+           
+              <p class="site-description motion-element" itemprop="description">叫我旺仔<br>Android Developer</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">49</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">70</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://plus.google.com/u/0/111824269044709365866" target="_blank" title="Google">
+                  
+                    <i class="fa fa-fw fa-google"></i>
+                  
+                    
+                      Google
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/wangzailfm" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/809077554" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                    
+                      Weibo
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="673173629@qq.com" target="_blank" title="E-Mail">
+                  
+                    <i class="fa fa-fw fa-envelope"></i>
+                  
+                    
+                      E-Mail
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/u011976726" target="_blank" title="CSDN">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      CSDN
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.jianshu.com/u/5509a21c1623" target="_blank" title="Jianshu">
+                  
+                    <i class="fa fa-fw fa-book"></i>
+                  
+                    
+                      Jianshu
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-block">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              Links
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://wanandroid.com/" title="玩Android" target="_blank">玩Android</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://blog.csdn.net/lmj623565791?viewmode=contents" title="HongYang" target="_blank">HongYang</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="https://lgzh1215.github.io/" title="萌雀" target="_blank">萌雀</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://ice1000.org/" title="冰封" target="_blank">冰封</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#开始"><span class="nav-number">2.</span> <span class="nav-text">开始</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#仿mapOf"><span class="nav-number">2.1.</span> <span class="nav-text">仿mapOf</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参数类型匹配"><span class="nav-number">2.2.</span> <span class="nav-text">参数类型匹配</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#最终"><span class="nav-number">3.</span> <span class="nav-text">最终</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#顺手写别的扩展"><span class="nav-number">3.1.</span> <span class="nav-text">顺手写别的扩展</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy;  2017 - 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jowan</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

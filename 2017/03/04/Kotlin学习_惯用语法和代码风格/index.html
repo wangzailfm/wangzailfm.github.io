@@ -1,0 +1,1300 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+  <meta name="google-site-verification" content="vjImUBDCK8Rg9G13vkIip_GUsZTtVV6s-XdSk81-jzA">
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="Kotlin,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="旺仔的个人博客" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.png?v=5.1.2">
+
+
+
+
+
+
+<meta name="description" content="本文是学习Kotlin的惯用语法和代码风格，与Java的语法和代码风格有一些相同，也有一些不同。">
+<meta name="keywords" content="Kotlin">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Kotlin学习_惯用语法和代码风格（Idioms And Coding Conventions）">
+<meta property="og:url" content="https://www.jowanxu.top/2017/03/04/Kotlin学习_惯用语法和代码风格/index.html">
+<meta property="og:site_name" content="旺仔的个人博客">
+<meta property="og:description" content="本文是学习Kotlin的惯用语法和代码风格，与Java的语法和代码风格有一些相同，也有一些不同。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1241355-7a8259a392193aae.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2019-08-27T12:18:42.387Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Kotlin学习_惯用语法和代码风格（Idioms And Coding Conventions）">
+<meta name="twitter:description" content="本文是学习Kotlin的惯用语法和代码风格，与Java的语法和代码风格有一些相同，也有一些不同。">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/1241355-7a8259a392193aae.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://www.jowanxu.top/2017/03/04/Kotlin学习_惯用语法和代码风格/">
+
+
+
+
+
+  <title>Kotlin学习_惯用语法和代码风格（Idioms And Coding Conventions） | 旺仔的个人博客</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">旺仔的个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">叫我旺仔<br>Android Developer</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br>
+            
+            公益
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://www.jowanxu.top/2017/03/04/Kotlin学习_惯用语法和代码风格/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Jowan">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="旺仔的个人博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Kotlin学习_惯用语法和代码风格（Idioms And Coding Conventions）</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-04T20:01:59+08:00">
+                2017-03-04
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2019-08-27T20:18:42+08:00">
+                2019-08-27
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kotlin/" itemprop="url" rel="index">
+                    <span itemprop="name">Kotlin</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <br>
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">文章字数</span>
+                
+                <span title="文章字数">
+                   字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长需</span>
+                
+                <span title="阅读时长需">
+                   分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><img src="http://upload-images.jianshu.io/upload_images/1241355-7a8259a392193aae.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Concise"></p>
+<p>本文是学习Kotlin的惯用语法和代码风格，与Java的语法和代码风格有一些相同，也有一些不同。</p>
+<a id="more"></a>
+<h2 id="创建DTO’s-POJOs-POCOs-数据类-Creating-DTOs-POJOs-POCOs"><a href="#创建DTO’s-POJOs-POCOs-数据类-Creating-DTOs-POJOs-POCOs" class="headerlink" title="创建DTO’s(POJOs/POCOs)数据类(Creating DTOs (POJOs/POCOs))"></a>创建DTO’s(POJOs/POCOs)数据类(Creating DTOs (POJOs/POCOs))</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">data class <span class="title">Customer</span><span class="params">(val name: String, val email: String)</span></span></span><br></pre></td></tr></table></figure>
+<p>这里的Customer是数据类，在Kotlin中，会自动为Customer类生成以下方法</p>
+<ul>
+<li>给所有属性添加<code>getter</code>方法，如果是var类型的话会添加<code>setter</code>方法</li>
+<li><code>equals()</code></li>
+<li><code>haseCode()</code></li>
+<li><code>toString()</code></li>
+<li><code>copy()</code></li>
+<li>给所有属性添加<code>component1()</code>，<code>component2()</code>，…</li>
+</ul>
+<h2 id="函数参数默认值-Default-values-for-function-parameters"><a href="#函数参数默认值-Default-values-for-function-parameters" class="headerlink" title="函数参数默认值(Default values for function parameters)"></a>函数参数默认值(Default values for function parameters)</h2><p>可以为函数的参数设置默认值<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">fun <span class="title">foo</span><span class="params">(a: Int = <span class="number">0</span>, b: String = <span class="string">""</span>)</span> </span>&#123; ... &#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="过滤list-Filtering-a-list"><a href="#过滤list-Filtering-a-list" class="headerlink" title="过滤list(Filtering a list)"></a>过滤list(Filtering a list)</h2><p>使用扩展函数<code>filter</code>来过滤list<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">val positives = list.filter &#123; x -&gt; x &gt; <span class="number">0</span> &#125;</span><br></pre></td></tr></table></figure></p>
+<p>或者用<code>it</code>来替换x<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">val positives = list.filter &#123; it &gt; <span class="number">0</span> &#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="判断实例-Instance-Checks"><a href="#判断实例-Instance-Checks" class="headerlink" title="判断实例(Instance Checks)"></a>判断实例(Instance Checks)</h2><p>通过用is来判断是否属于某个实例<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">when (x) &#123;</span><br><span class="line">    is Foo -&gt;  ...</span><br><span class="line">    is Bar -&gt; ...</span><br><span class="line">    <span class="keyword">else</span> -&gt; ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="遍历map-list-Traversing-a-map-list-of-pairs"><a href="#遍历map-list-Traversing-a-map-list-of-pairs" class="headerlink" title="遍历map/list(Traversing a map/list of pairs)"></a>遍历map/list(Traversing a map/list of pairs)</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> ((k, v) in map) &#123;</span><br><span class="line">    println(<span class="string">"$k -&gt; $v"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其中k和v可用任意命名</p>
+<h2 id="只读list-map-Read-only-list-map"><a href="#只读list-map-Read-only-list-map" class="headerlink" title="只读list/map(Read-only list/map)"></a>只读<code>list</code>/<code>map</code>(Read-only list/map)</h2><p>只读就是设置为常量<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">val list = listOf(<span class="string">"a"</span>, <span class="string">"b"</span>, <span class="string">"c"</span>) </span><br><span class="line">val map = mapOf(<span class="string">"a"</span> to <span class="number">1</span>, <span class="string">"b"</span> to <span class="number">2</span>, <span class="string">"c"</span> to <span class="number">3</span>)</span><br></pre></td></tr></table></figure></p>
+<h2 id="访问map-Accessing-a-map"><a href="#访问map-Accessing-a-map" class="headerlink" title="访问map(Accessing a map)"></a>访问map(Accessing a map)</h2><p>对map的使用<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">println(map[<span class="string">"key"</span>])</span><br><span class="line">map[<span class="string">"key"</span>] = value</span><br></pre></td></tr></table></figure></p>
+<h2 id="延时加载-Lazy-property"><a href="#延时加载-Lazy-property" class="headerlink" title="延时加载(Lazy property)"></a>延时加载(Lazy property)</h2><p>lazy 用于延时加载，即第一次使用时才执行初始化的操作。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">val p: String by lazy &#123;</span><br><span class="line">    <span class="comment">// compute the string</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="扩展函数-Extension-Functions"><a href="#扩展函数-Extension-Functions" class="headerlink" title="扩展函数(Extension Functions)"></a>扩展函数(Extension Functions)</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">fun String.spcaceToCamelCase() &#123; ... &#125;</span><br><span class="line"><span class="string">"Convert this to camelcase"</span>.spcaceToCamelCase()</span><br></pre></td></tr></table></figure>
+<p>前面有提到<code>filter</code>扩展函数，扩展函数就是创建可直接使用的方法，例如我要创建一个可直接使用的toast方法，可以这样写<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">fun Context.toast(content: String?) &#123;</span><br><span class="line">    Toast.makeText(<span class="keyword">this</span>, content, Toast.LENGTH_SHORT).show()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>调用的时候<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// activity里面</span></span><br><span class="line">toast(<span class="string">"扩展函数"</span>)</span><br><span class="line"><span class="comment">// 有context的时候</span></span><br><span class="line">mContext.toast(<span class="string">"扩展函数"</span>)</span><br></pre></td></tr></table></figure></p>
+<h2 id="创建单例-Creating-a-singleton"><a href="#创建单例-Creating-a-singleton" class="headerlink" title="创建单例(Creating a singleton)"></a>创建单例(Creating a singleton)</h2><p>Kotlin创建单例模式就比较简单了<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">object Resource &#123;</span><br><span class="line">    val name = <span class="string">"Name"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="如果不为空则…的简写-If-not-null-shorthand"><a href="#如果不为空则…的简写-If-not-null-shorthand" class="headerlink" title="如果不为空则…的简写(If not null shorthand)"></a>如果不为空则…的简写(If not null shorthand)</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">val files = File(<span class="string">"Test"</span>).listFiles()</span><br><span class="line"><span class="comment">// 对files加了不为空的判断(?)</span></span><br><span class="line">println(files?.size)</span><br></pre></td></tr></table></figure>
+<h2 id="如果不为空则…否则…的简写-If-not-null-and-else-shorthand"><a href="#如果不为空则…否则…的简写-If-not-null-and-else-shorthand" class="headerlink" title="如果不为空则…否则…的简写(If not null and else shorthand)"></a>如果不为空则…否则…的简写(If not null and else shorthand)</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">val files = File(<span class="string">"Test"</span>).listFiles()</span><br><span class="line"><span class="comment">// 对files加了不为空的判断(?)，同时加了为空的判断(?:)</span></span><br><span class="line">println(files?.size ?: <span class="string">"empty"</span>) <span class="comment">// 如果files为空则打印empty</span></span><br></pre></td></tr></table></figure>
+<h2 id="如果为空，则执行语句-Executing-a-statement-if-null"><a href="#如果为空，则执行语句-Executing-a-statement-if-null" class="headerlink" title="如果为空，则执行语句(Executing a statement if null)"></a>如果为空，则执行语句(Executing a statement if null)</h2><p>使用<code>?:</code>符号，为空时执行语句<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">val data = ...</span><br><span class="line">val email = data[<span class="string">"email"</span>] ?: <span class="keyword">throw</span> IllegalStateException(<span class="string">"Email is missing!"</span>)</span><br><span class="line">val name = data[<span class="string">"name"</span>] ?:let&#123;</span><br><span class="line">      ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="如果不为空，则执行语句-Execute-if-not-null"><a href="#如果不为空，则执行语句-Execute-if-not-null" class="headerlink" title="如果不为空，则执行语句(Execute if not null)"></a>如果不为空，则执行语句(Execute if not null)</h2><p>使用<code>?</code>符号，加非空判断，<code>.let{ }</code>是不为空的时候执行<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">val data = ...</span><br><span class="line"></span><br><span class="line">data?.let &#123;</span><br><span class="line">    ... <span class="comment">// 如果不为空，请执行此块操作</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="返回-when-判断-Return-on-when-statement"><a href="#返回-when-判断-Return-on-when-statement" class="headerlink" title="返回 when 判断(Return on when statement)"></a>返回 when 判断(Return on when statement)</h2><p>返回的时候可以直接用<code>when</code>表达式返回值<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">fun <span class="title">transform</span><span class="params">(color: String)</span>: Int </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> when (color) &#123;</span><br><span class="line">        <span class="string">"Red"</span> -&gt; <span class="number">0</span></span><br><span class="line">        <span class="string">"Green"</span> -&gt; <span class="number">1</span></span><br><span class="line">        <span class="string">"Blue"</span> -&gt; <span class="number">2</span></span><br><span class="line">        <span class="keyword">else</span> -&gt; <span class="keyword">throw</span> IllegalArgumentException(<span class="string">"Invalid color param value"</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>如果一个函数只有一个并且是表达式函数体并且是返回类型自动推断的话，可以直接等于返回值<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">fun <span class="title">transform</span><span class="params">(color: String)</span>: Int </span>= when (color) &#123;</span><br><span class="line">    <span class="string">"Red"</span> -&gt; <span class="number">0</span></span><br><span class="line">    <span class="string">"Green"</span> -&gt; <span class="number">1</span></span><br><span class="line">    <span class="string">"Blue"</span> -&gt; <span class="number">2</span></span><br><span class="line">    <span class="keyword">else</span> -&gt; <span class="keyword">throw</span> IllegalArgumentException(<span class="string">"Invalid color param value"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="try-catch表达式-‘try-catch’-expression"><a href="#try-catch表达式-‘try-catch’-expression" class="headerlink" title="try / catch表达式(‘try/catch’ expression)"></a>try / catch表达式(‘try/catch’ expression)</h2><p>Kotlin的try/catch表达式同Java类似，Kotlin可以直接赋值<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">fun <span class="title">test</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    val result = <span class="keyword">try</span> &#123;</span><br><span class="line">        count()</span><br><span class="line">    &#125; <span class="keyword">catch</span> (e: ArithmeticException) &#123;</span><br><span class="line">        <span class="keyword">throw</span> IllegalStateException(e)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 处理result</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="方法使用Builder模式返回Unit-Builder-style-usage-of-methods-that-return-Unit"><a href="#方法使用Builder模式返回Unit-Builder-style-usage-of-methods-that-return-Unit" class="headerlink" title="方法使用Builder模式返回Unit(Builder-style usage of methods that return Unit)"></a>方法使用Builder模式返回Unit(Builder-style usage of methods that return Unit)</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">fun <span class="title">arrOfMinusOnes</span><span class="params">(size: Int)</span>: IntArray</span>&#123;</span><br><span class="line">    <span class="comment">// 生成一个大小为size，每个值为-1的数组</span></span><br><span class="line">    <span class="keyword">return</span> IntArray(size).apply&#123; fill(-<span class="number">1</span>) &#125; <span class="comment">// fill(-1)设置为值为-1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="单表达式函数-Single-expression-functions"><a href="#单表达式函数-Single-expression-functions" class="headerlink" title="单表达式函数(Single-expression functions)"></a>单表达式函数(Single-expression functions)</h2><p>前面说过如果一个函数只有一个并且是表达式函数体并且是返回类型自动推断的话，可以直接等于返回值<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">fun <span class="title">theAnswer</span><span class="params">()</span> </span>= <span class="number">42</span></span><br></pre></td></tr></table></figure></p>
+<p>等同于<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">fun <span class="title">theAnswer</span><span class="params">()</span>: Int </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">42</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="使用with调用一个对象实例的多个方法-Calling-multiple-methods-on-an-object-instance-‘with’"><a href="#使用with调用一个对象实例的多个方法-Calling-multiple-methods-on-an-object-instance-‘with’" class="headerlink" title="使用with调用一个对象实例的多个方法(Calling multiple methods on an object instance (‘with’))"></a>使用<code>with</code>调用一个对象实例的多个方法(Calling multiple methods on an object instance (‘with’))</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Turtle</span> </span>&#123;</span><br><span class="line">    <span class="function">fun <span class="title">penDown</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    fun <span class="title">penUp</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    fun <span class="title">turn</span><span class="params">(degrees: Double)</span> </span></span><br><span class="line"><span class="function">    fun <span class="title">forward</span><span class="params">(pixels: Double)</span></span></span><br><span class="line"><span class="function">&#125;</span></span><br><span class="line"><span class="function">val myTurtle </span>= Turtle()</span><br><span class="line"><span class="comment">// 如果正常的写</span></span><br><span class="line">myTurtle.penDOwn()</span><br><span class="line"><span class="keyword">for</span>(i in <span class="number">1</span>..<span class="number">4</span>) &#123;</span><br><span class="line">    myTurtle.forward(<span class="number">100.0</span>)</span><br><span class="line">    myTurtle.turn(<span class="number">90.0</span>) </span><br><span class="line">&#125;</span><br><span class="line">myTurtle.penUp() </span><br><span class="line"><span class="comment">// 使用with将对象实例引用，代码减少很多</span></span><br><span class="line">with(myTurtle) &#123; </span><br><span class="line">    penDown()</span><br><span class="line">    <span class="keyword">for</span>(i in <span class="number">1</span>..<span class="number">4</span>) &#123;</span><br><span class="line">        forward(<span class="number">100.0</span>)</span><br><span class="line">        turn(<span class="number">90.0</span>) </span><br><span class="line">    &#125;</span><br><span class="line">    penUp() </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>同样，在<code>Adapter</code>里面可以直接使用<code>with</code>来替换<code>holder.itemView</code><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">with(holder.itemView) &#123;</span><br><span class="line">       <span class="comment">// 名称</span></span><br><span class="line">       new_item_text.text = mDatas?.get(position)?.desc</span><br><span class="line">        <span class="comment">// 作者</span></span><br><span class="line">        new_item_user.text = mDatas?.get(position)?.who.let &#123; Constant.NEW_ITEM_USER_NULL &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="Java-7的try-with-resources-Java-7’s-try-with-resources"><a href="#Java-7的try-with-resources-Java-7’s-try-with-resources" class="headerlink" title="Java 7的try with resources(Java 7’s try with resources)"></a>Java 7的<code>try with resources</code>(Java 7’s try with resources)</h2><p> <code>try-with-resources</code>语句是一个声明一个或多个资源的 <code>try</code>语句。一个资源作为一个对象，必须在程序结束之后随之关闭。<br>在Java 7 之前, 可以使用<code>finally</code>块来确保资源被关闭，不管<code>try</code>语句正常地完成或是发生意外。而<code>try-with-resources</code>语句确保在语句的最后每个资源都被关闭 。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">val stream = Files.newInputStream(Paths.get(<span class="string">"/some/file.txt"</span>))</span><br><span class="line">stream.buffered().reader().use &#123; reader -&gt;</span><br><span class="line">    println(reader.readText())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="泛型转换-Convenient-form-for-a-generic-function-that-requires-the-generic-type-information"><a href="#泛型转换-Convenient-form-for-a-generic-function-that-requires-the-generic-type-information" class="headerlink" title="泛型转换(Convenient form for a generic function that requires the generic type information)"></a>泛型转换(Convenient form for a generic function that requires the generic type information)</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//  public final class Gson &#123;</span></span><br><span class="line"><span class="comment">//     ...</span></span><br><span class="line"><span class="comment">//     public &lt;T&gt; T fromJson(JsonElement json, Class&lt;T&gt; classOfT) throws JsonSyntaxException &#123;</span></span><br><span class="line"><span class="comment">//     ...</span></span><br><span class="line"></span><br><span class="line">inline fun &lt;reified T: Any&gt; Gson.fromJson(json): T = <span class="keyword">this</span>.fromJson(json, T::<span class="class"><span class="keyword">class</span>.<span class="title">java</span>)</span></span><br></pre></td></tr></table></figure>
+<h2 id="使用可空的Boolean-Consuming-a-nullable-Boolean"><a href="#使用可空的Boolean-Consuming-a-nullable-Boolean" class="headerlink" title="使用可空的Boolean(Consuming a nullable Boolean)"></a>使用可空的<code>Boolean</code>(Consuming a nullable Boolean)</h2><p>添加<code>?</code>符号可以让变量可为空<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">val b: Boolean? = ...</span><br><span class="line"><span class="keyword">if</span> (b == <span class="keyword">true</span>) &#123;</span><br><span class="line">    ...</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="comment">// `b` 是false或者为null</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="命名风格-Naming-Style"><a href="#命名风格-Naming-Style" class="headerlink" title="命名风格(Naming Style)"></a>命名风格(Naming Style)</h2><p>Kotlin的命名风格与Java的类似</p>
+<ul>
+<li>使用骆驼命名法(在命名中避免下划线)</li>
+<li>类型名称首字母大写</li>
+<li>方法和属性首字母小写</li>
+<li>缩进用四个空格</li>
+<li>……</li>
+</ul>
+<h2 id="冒号-Colon"><a href="#冒号-Colon" class="headerlink" title="冒号(Colon)"></a>冒号(Colon)</h2><p>在冒号之前有一个空格，冒号分隔类型和超类型(<code>fun foo(a: Int): T</code>)，没有空格，冒号分隔实例和类型(<code>var bar: String</code>)：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">interface Foo&lt;out T : Any&gt; : Bar &#123;</span><br><span class="line">    <span class="function">fun <span class="title">foo</span><span class="params">(a: Int)</span>: T</span></span><br><span class="line"><span class="function">&#125;</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="Lambdas"><a href="#Lambdas" class="headerlink" title="Lambdas"></a>Lambdas</h2><p>Kotlin支持Lambdas表达式，在 Lambdas 表达式中，大括号与表达式间要有空格，箭头与参数和函数体间要有空格。尽可能的把 Lambda 放在括号外面传入<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">list.filter &#123; it &gt; <span class="number">10</span> &#125;.map &#123; element -&gt; element * <span class="number">2</span> &#125;</span><br></pre></td></tr></table></figure></p>
+<p>在短的且不嵌套的Lambdas中，建议使用<code>it</code>替换参数，有嵌套而已有多个参数的Lambdas中，就不能用<code>it</code>来替换参数，必须明确声明参数。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    Jowan
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://www.jowanxu.top/2017/03/04/Kotlin学习_惯用语法和代码风格/" title="Kotlin学习_惯用语法和代码风格（Idioms And Coding Conventions）">https://www.jowanxu.top/2017/03/04/Kotlin学习_惯用语法和代码风格/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Kotlin/" rel="tag"><i class="fa fa-tag"></i> Kotlin</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/03/01/Kotlin学习_基本类型/" rel="next" title="Kotlin学习_基本类型（Basic Types）">
+                <i class="fa fa-chevron-left"></i> Kotlin学习_基本类型（Basic Types）
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/03/07/Kotlin学习_包、控制流、返回与跳转/" rel="prev" title="Kotlin学习_包、控制流、返回与跳转">
+                Kotlin学习_包、控制流、返回与跳转 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zMjA1My84NjE3"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="Jowan">
+          <p class="site-author-name" itemprop="name">Jowan</p>
+           
+              <p class="site-description motion-element" itemprop="description">叫我旺仔<br>Android Developer</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">49</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">70</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://plus.google.com/u/0/111824269044709365866" target="_blank" title="Google">
+                  
+                    <i class="fa fa-fw fa-google"></i>
+                  
+                    
+                      Google
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/wangzailfm" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/809077554" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                    
+                      Weibo
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="673173629@qq.com" target="_blank" title="E-Mail">
+                  
+                    <i class="fa fa-fw fa-envelope"></i>
+                  
+                    
+                      E-Mail
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/u011976726" target="_blank" title="CSDN">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      CSDN
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.jianshu.com/u/5509a21c1623" target="_blank" title="Jianshu">
+                  
+                    <i class="fa fa-fw fa-book"></i>
+                  
+                    
+                      Jianshu
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-block">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              Links
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://wanandroid.com/" title="玩Android" target="_blank">玩Android</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://blog.csdn.net/lmj623565791?viewmode=contents" title="HongYang" target="_blank">HongYang</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="https://lgzh1215.github.io/" title="萌雀" target="_blank">萌雀</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://ice1000.org/" title="冰封" target="_blank">冰封</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#创建DTO’s-POJOs-POCOs-数据类-Creating-DTOs-POJOs-POCOs"><span class="nav-number">1.</span> <span class="nav-text">创建DTO’s(POJOs/POCOs)数据类(Creating DTOs (POJOs/POCOs))</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#函数参数默认值-Default-values-for-function-parameters"><span class="nav-number">2.</span> <span class="nav-text">函数参数默认值(Default values for function parameters)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#过滤list-Filtering-a-list"><span class="nav-number">3.</span> <span class="nav-text">过滤list(Filtering a list)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#判断实例-Instance-Checks"><span class="nav-number">4.</span> <span class="nav-text">判断实例(Instance Checks)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#遍历map-list-Traversing-a-map-list-of-pairs"><span class="nav-number">5.</span> <span class="nav-text">遍历map/list(Traversing a map/list of pairs)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#只读list-map-Read-only-list-map"><span class="nav-number">6.</span> <span class="nav-text">只读list/map(Read-only list/map)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#访问map-Accessing-a-map"><span class="nav-number">7.</span> <span class="nav-text">访问map(Accessing a map)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#延时加载-Lazy-property"><span class="nav-number">8.</span> <span class="nav-text">延时加载(Lazy property)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#扩展函数-Extension-Functions"><span class="nav-number">9.</span> <span class="nav-text">扩展函数(Extension Functions)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#创建单例-Creating-a-singleton"><span class="nav-number">10.</span> <span class="nav-text">创建单例(Creating a singleton)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如果不为空则…的简写-If-not-null-shorthand"><span class="nav-number">11.</span> <span class="nav-text">如果不为空则…的简写(If not null shorthand)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如果不为空则…否则…的简写-If-not-null-and-else-shorthand"><span class="nav-number">12.</span> <span class="nav-text">如果不为空则…否则…的简写(If not null and else shorthand)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如果为空，则执行语句-Executing-a-statement-if-null"><span class="nav-number">13.</span> <span class="nav-text">如果为空，则执行语句(Executing a statement if null)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如果不为空，则执行语句-Execute-if-not-null"><span class="nav-number">14.</span> <span class="nav-text">如果不为空，则执行语句(Execute if not null)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#返回-when-判断-Return-on-when-statement"><span class="nav-number">15.</span> <span class="nav-text">返回 when 判断(Return on when statement)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#try-catch表达式-‘try-catch’-expression"><span class="nav-number">16.</span> <span class="nav-text">try / catch表达式(‘try/catch’ expression)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#方法使用Builder模式返回Unit-Builder-style-usage-of-methods-that-return-Unit"><span class="nav-number">17.</span> <span class="nav-text">方法使用Builder模式返回Unit(Builder-style usage of methods that return Unit)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#单表达式函数-Single-expression-functions"><span class="nav-number">18.</span> <span class="nav-text">单表达式函数(Single-expression functions)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用with调用一个对象实例的多个方法-Calling-multiple-methods-on-an-object-instance-‘with’"><span class="nav-number">19.</span> <span class="nav-text">使用with调用一个对象实例的多个方法(Calling multiple methods on an object instance (‘with’))</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Java-7的try-with-resources-Java-7’s-try-with-resources"><span class="nav-number">20.</span> <span class="nav-text">Java 7的try with resources(Java 7’s try with resources)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#泛型转换-Convenient-form-for-a-generic-function-that-requires-the-generic-type-information"><span class="nav-number">21.</span> <span class="nav-text">泛型转换(Convenient form for a generic function that requires the generic type information)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用可空的Boolean-Consuming-a-nullable-Boolean"><span class="nav-number">22.</span> <span class="nav-text">使用可空的Boolean(Consuming a nullable Boolean)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#命名风格-Naming-Style"><span class="nav-number">23.</span> <span class="nav-text">命名风格(Naming Style)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#冒号-Colon"><span class="nav-number">24.</span> <span class="nav-text">冒号(Colon)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Lambdas"><span class="nav-number">25.</span> <span class="nav-text">Lambdas</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy;  2017 - 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jowan</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
